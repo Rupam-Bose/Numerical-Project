@@ -1,0 +1,47 @@
+Solution of Linear System using Gauss-Jordan Elimination Method
+Multiple Testcases
+
+=============================================
+Test case: 1
+The Linear System: 
+3*x1  + 6*x2  + 1*x3  = 16
+2*x1  + 4*x2  + 3*x3  = 13
+1*x1  + 3*x2  + 2*x3  = 9
+
+The system has UNIQUE SOLUTION.
+
+Solutions: 
+x1 = 1
+x2 = 2
+x3 = 1
+=============================================
+Test case: 2
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 4
+
+The system has INFINITE SOLUTIONS.
+=============================================
+Test case: 3
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 5
+
+The system has NO SOLUTION.
+=============================================
+Test case: 4
+The Linear System: 
+2*x1  + 1*x2 -1*x3  + 3*x4  + 2*x5  = 9
+1*x1  + 3*x2  + 2*x3 -1*x4  + 1*x5  = 8
+3*x1  + 2*x2  + 4*x3  + 1*x4 -2*x5  = 20
+2*x1  + 1*x2  + 3*x3  + 2*x4  + 1*x5  = 17
+1*x1 -1*x2  + 2*x3  + 3*x4  + 4*x5  = 15
+
+The system has UNIQUE SOLUTION.
+
+Solutions: 
+x1 = 5.15385
+x2 = -1
+x3 = 2.26154
+x4 = -0.138462
+x5 = 1.18462
