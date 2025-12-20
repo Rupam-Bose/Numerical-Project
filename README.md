@@ -4097,7 +4097,10 @@ Print the answer: 105
 <br>
 
 ### 📖 Newton Divided Difference Interpolation Method Theory
+Newton’s Divided Difference Interpolation Method is used to estimate the value of a function when the data points are **unequally spaced**.  
+It constructs an interpolation polynomial using divided differences instead of finite differences.
 
+---
 <br>
 
 ### 🔢 Mathematical Representation
@@ -4105,46 +4108,183 @@ Print the answer: 105
 <br>
 
 ### 🤖 Algorithm
+1. Arrange the given data points (spacing need not be equal).
+2. Construct the divided difference table.
+3. Form the interpolation polynomial using divided differences.
+4. Substitute the required value of **x**.
+5. Evaluate the polynomial to obtain the interpolated value.
 
+---
+### Divided Difference Interpolation Formula
+The Newton divided difference polynomial is given by:
+```
+P(x) = f[x0]+ (x − x0) f[x0, x1]+ (x − x0)(x − x1) f[x0, x1, x2]+ ...
+```
+
+Where the divided differences are defined as:
+```
+f[xi, xj] = (f(xj) − f(xi)) / (xj − xi)
+```
 <br>
 
 ### 💻 Newton Divided Difference Interpolation Method Code
 
 ```cpp
-code
+#include<bits/stdc++.h>
+#include<fstream>
+using namespace std;
+
+double product(int n,double val,vector<double> &x){
+    double pro=1;
+    for(int i=0;i<n;i++){
+        pro*=(val-x[i]);
+    }
+    return pro;
+}
+
+void difTable(vector<vector<double>> &y,vector<double> &x){
+    int n=x.size();
+    for(int i=1;i<n;i++){
+        for(int j=0;j<n-i;j++){
+            y[j][i]=(y[j+1][i-1]-y[j][i-1])/(x[j+i]-x[j]);
+        }
+    }
+}
+
+void printTable(vector<vector<double>> &y,vector<double> &x,ofstream& fout){
+    int n=y.size(); 
+    fout<<"Printing the divided difference table: \n";
+
+    for(int i=0;i<n;i++){
+        fout<<x[i]<<" ";
+        for(int j=0;j<n-i;j++){
+            fout<<y[i][j]<<" ";
+        }
+        fout<<endl;
+    }
+    fout<<endl;
+}
+
+double mainFunc(vector<vector<double>> &y,vector<double> &x,double val){
+    int n=x.size();
+    double ans=y[0][0];
+    for(int i=1;i<n;i++){
+        ans+=(y[0][i]*product(i,val,x));
+    }
+    return ans;
+}
+
+int main(){
+    ifstream fin("inp.txt");
+    ofstream fout("out.txt");
+
+    int n;
+    fin>>n;
+
+    vector<double> x(n),y0(n);
+    vector<vector<double>> y(n,vector<double>(n,0));
+
+    for(int i=0;i<n;i++){
+        fin>>x[i];
+    }
+
+    for(int i=0;i<n;i++){
+        fin>>y0[i];
+    }
+
+    for(int i=0;i<n;i++){
+        y[i][0]=y0[i];
+    }
+
+    double val;
+    fin>>val;
+
+    difTable(y,x);
+    printTable(y,x,fout);
+
+    double ans=mainFunc(y,x,val);
+    fout<<"Print the answer: "<<ans<<endl;
+
+    // -------- Truncation Error Part --------
+    double a,b;
+    fin>>a>>b;
+
+    vector<double> x_ext=x, y0_ext=y0;
+    x_ext.push_back(a);
+    y0_ext.push_back(b);
+
+    int n_ext=n+1;
+    vector<vector<double>> y_ext(n_ext,vector<double>(n_ext,0));
+
+    for(int i=0;i<n_ext;i++){
+        y_ext[i][0]=y0_ext[i];
+    }
+
+    double ans_ext=mainFunc(y_ext,x_ext,val);
+    double err=fabs(ans_ext-ans);
+
+    fout<<"Truncation error : "<<err<<endl;
+
+
+    return 0;
+}
+
 ```
 <br>
 
 ### 📝 Newton Divided Difference Interpolation Method Input
 ```
-Input
+3
+1 4 6
+0 1.386294 1.79175 
+2
+5 1.609438
 ```
 <br>
 
 ### 📤 Newton Divided Difference Interpolation Method Output
 ```
-Output
+Printing the divided difference table: 
+1 0 0.462098 -0.051874 
+4 1.38629 0.202728 
+6 1.79175 
+
+Print the answer: 0.565846
+Truncation error : 0.0629
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
+- Accuracy depends on the number of data points used.
+- Higher-order terms improve approximation but increase computation.
+- Unequal spacing does not affect applicability.
+- Numerical errors may increase for higher-degree polynomials.
 
+---
 <br>
 
 ### ➕ Advantages
+- Applicable to unequally spaced data.
+- Flexible and general interpolation method.
+- No requirement for constant step size.
 
+---
 <br>
 
 ### ➖ Disadvantages
+- Computation becomes complex for large datasets.
+- Higher-degree polynomials may cause oscillations.
+- Less efficient than finite difference methods for equally spaced data.
 
+---
 <br>
 
 ### 🚀 Applications
-
+- Interpolation of experimental and observational data.
+- Engineering and scientific computations.
+- Situations where data spacing is non-uniform.
 <br>
-
 [Back to Top](#-Table-of-Contents)
-
 ---
 
 
@@ -4160,7 +4300,10 @@ Output
 <br>
 
 ### 📖 Runge Kutta Method Theory
+The Runge–Kutta Fourth Order (RK4) method is a numerical technique used to approximate the solution of a **first-order ordinary differential equation** with a given initial condition.  
+It provides high accuracy by combining multiple slope evaluations within a single step.
 
+---
 <br>
 
 ### 🔢 Mathematical Representation
@@ -4168,43 +4311,119 @@ Output
 <br>
 
 ### 🤖 Algorithm
+1. Define the differential equation:
+```
+dy/dx = f(x, y)
+```
+with initial condition:
+```
+y(x0) = y0
+```
+2. Choose a suitable step size **h**.
+3. Compute the intermediate slopes:
+```
+k1 = h f(xn, yn)
+k2 = h f(xn + h/2, yn + k1/2)
+k3 = h f(xn + h/2, yn + k2/2)
+k4 = h f(xn + h, yn + k3)
 
+```
+4. Update the solution:
+```
+y(n+1) = yn + (1/6) (k1 + 2k2 + 2k3 + k4)
+```
+5. Repeat the process for subsequent steps.
+
+---
 <br>
 
 ### 💻 Runge Kutta Method Code
 
 ```cpp
-code
+#include<bits/stdc++.h>
+#include<fstream>
+using namespace std;
+
+float df(float x,float y){
+   // return (x-y)/2;
+   return (x*y+y*y);
+}
+float RK4(float x0,float y0,float x, float h){
+       int n=(int)((x-x0)/h);
+       float y=y0;
+
+       for(int i=1;i<=n;i++){
+        float k1=h*df(x0,y);
+        float k2=h*df(x0+h*0.5,y+k1*0.5);
+        float k3=h*df(x0+h*0.5,y+k2*0.5);
+        float k4=h*df(x0+h,y+k3);
+
+        float k=(1.0/6.0)*(k1+2*k2+2*k3+k4);
+        x0+=h;
+        y=y+k;
+       }
+       return y;
+}
+
+int main(){
+  ifstream fin("in.txt");
+  ofstream fout("out.txt");
+  float x0,y0,x,h;
+  fin>>x0>>y0>>x>>h;
+float y_ans=RK4(x0,y0,x,h);
+
+fout<<"Final soln.: "<<y_ans<<endl;
+
+    return 0;
+}
 ```
 <br>
 
 ### 📝 Runge Kutta Method Input
 ```
-Input
+0 1 0.1 0.1
 ```
 <br>
 
 ### 📤 Runge Kutta Method Output
 ```
-Output
+Final soln.: 1.11689
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
+- RK4 is a fourth-order accurate method.
+- Smaller step size improves accuracy.
+- More accurate than Euler and second-order Runge–Kutta methods.
 
+---
 <br>
 
 ### ➕ Advantages
+- High accuracy with moderate computational effort.
+- Stable and reliable for most initial value problems.
+- Does not require higher-order derivatives.
+
+---
 
 <br>
 
 ### ➖ Disadvantages
+- Requires more computations per step.
+- Fixed step size may be inefficient for stiff equations.
+- Not self-correcting like adaptive methods.
 
+---
 <br>
 
 ### 🚀 Applications
-- Aplications
+- Solving initial value problems in engineering.
+- Modeling physical and biological systems.
+- Numerical simulation of dynamic systems.
 <br>
+
+---
+
 
 [Back to Top](#-Table-of-Contents)
 
