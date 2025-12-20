@@ -304,10 +304,6 @@ The procedure comprises of two phases:
      
 <br>
 
-### 🔢 Mathematical Representation
-
-<br>
-
 ### 🤖 Algorithm
 
   1. Perform partial pivoting for each row to select the largest element as the pivot of that row by swapping operation. The pivoting is done to avoid division by zero and round-off errors.
@@ -604,10 +600,6 @@ The method transforms the augmented matrix `[A | b]` into `[I | x]` where I is t
 
 <br>
 
-### 🔢 Mathematical Representation
-
-<br>
-
 ### 🤖 Algorithm
 
  1. Select the pivot element for each row by swapping the rows for the largest element of that column.
@@ -896,49 +888,368 @@ x5 = 1.18462
 
 ### 📖 LU-Factorization Method Theory
 
-<br>
+LU decomposition or factorization is a powerful numerical method for solving systems of linear equations. This method factorizes the coefficient matrix `A` into the product of two triangular matrices: a lower triangular matrix `L` and an upper triangular matrix `U`, such that `A = LU`.
 
-### 🔢 Mathematical Representation
+The procedure consists of three main phase:
+  1. *Decomposition Phase*: Decomposing the square coefficient matrix into lower triangular matrix `L` and upper triangular matrix `U` such that `A = LU`. The `L` matrix has ones on its diagonal, and `U` is obtained using Gauss elimination with partial pivoting.
 
+  2. *Forward Substitution*: Solving `Ly = b` for the intermediate vector y using the lower triangular matrix. This is straightforward since `L` is lower triangular.
+
+  3. *Backward Substitution*: Solving `Ux = y` for the solution vector `x` using the upper triangular matrix. This gives the final solution to the original system.
+     
 <br>
 
 ### 🤖 Algorithm
 
+ 1. Decomposition (Finding U and L matrices): 
+    - Initialize: Copy coefficient matrix A into U. Initialize L as a zero matrix with diagonal elements set to 1.
+    - Compute Upper Triangular Matrix U** (using Gauss elimination with partial pivoting): For each pivot row i,
+      - Find pivot with the largest absolute value in column i through swapping operation. 
+      - For each row k below the pivot:
+       ```
+       U[k][j] = U[k][j] - (U[k][i] / U[i][i]) × U[i][j]  (for all j >= i)
+       ```
+    - Compute Lower Triangular Matrix L**:
+      - Set L[i][i] = 1 for all diagonal elements
+      - For each element below the diagonal:
+     ```
+     L[j][i] = (A[j][i] - ∑(L[j][k] × U[k][i])) / U[i][i]
+     ```
+     where the sum is from k = 0 to i-1
+
+ 2. Forward Substitution (Solve Ly = b): For i from 0 to n-1:
+   ```
+   y[i] = (b[i] - ∑(L[i][j] × y[j])) / L[i][i]
+   ```
+   where the sum is from j = 0 to i-1
+
+ 3. Backward Substitution (Solve Ux = y): For i from n-1 down to 0:
+   ```
+   x[i] = (y[i] - ∑(U[i][j] × x[j])) / U[i][i]
+   ```
+   where the sum is from j = i+1 to n-1
+
+ 4. Check for Solution Type: Before backward substitution, verify:
+    - If U[n-1][n-1] = 0 and y[n-1] != 0: No solution
+    - If U[n-1][n-1] = 0 and y[n-1] = 0: Infinite solutions
+    - If U[n-1][n-1] != 0: Unique solution
 <br>
 
 ### 💻 LU-Factorization Method Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include <fstream>
+using namespace std;
+
+//-----A=LU : Decomposing the Conefficient Matrix into the product of Lower Triangular and Upper Triangular Matrices-----
+void decompose(vector<vector<double>> &a, vector<vector<double>> &u, vector<vector<double>> &l, vector<double> &b, int n)
+{
+    u = a;
+
+    //-----Finding the Upper Triangular Matrix using Gauss Elimination with Partial Pivoting-----
+    for (int i = 0; i < n - 1; i++)
+    {
+        int pivot = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (fabs(u[j][i]) > fabs(u[pivot][i]))
+                pivot = j;
+        }
+
+        if (pivot != i)
+        {
+            swap(u[i], u[pivot]);
+            swap(a[i], a[pivot]);
+            swap(b[i], b[pivot]);
+        }
+
+        if (fabs(u[i][i]) < 1e-9)
+            continue;
+
+        double x = u[i][i];
+        for (int k = i + 1; k < n; k++)
+        {
+            double y = u[k][i];
+
+            for (int j = i; j < n; j++)
+            {
+                u[k][j] -= u[i][j] * y / x;
+            }
+        }
+    }
+
+    //------Computing Lower Triangular Matrix-----
+    for (int i = 0; i < n; i++)
+    {
+        l[i][i] = 1;
+
+        for (int j = i + 1; j < n; j++)
+        {
+            double sum = 0;
+
+            for (int k = 0; k < i; k++)
+            {
+                sum += l[j][k] * u[k][i];
+            }
+
+            if (fabs(u[i][i]) < 1e-9)
+                l[j][i] = 0;
+            else
+                l[j][i] = (a[j][i] - sum) / u[i][i];
+        }
+    }
+}
+
+//-----LUx = b -> Ly = b : Forward Substitution Phase for y which is the solution of the Augmented Matrix [L|b]----
+void forward(vector<vector<double>> &l, vector<double> &y, vector<double> &b, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        double sum = 0;
+        for (int j = 0; j < i; j++)
+        {
+            sum += y[j] * l[i][j];
+        }
+        y[i] = (b[i] - sum) / l[i][i];
+    }
+}
+
+//-----Ux = y : Backward Substitution Phase for x which is the solution of the Augmented Matrix [U|y]-----
+void backward(vector<vector<double>> &u, vector<double> &x, vector<double> &y, int n)
+{
+    for (int i = n - 1; i >= 0; i--)
+    {
+        double sum = 0;
+        for (int j = i + 1; j < n; j++)
+        {
+            sum += x[j] * u[i][j];
+        }
+        x[i] = (y[i] - sum) / u[i][i];
+    }
+}
+
+//------Ax = b : Printing the Linear System-------
+void systemPrint(vector<vector<double>> &a, vector<double> &b, ofstream &fout)
+{
+    fout << "The Linear System: \n";
+    int n = a.size();
+    for (int i = 0; i < n; i++)
+    {
+        fout << a[i][0] << "*x" << 1 << " ";
+        for (int j = 1; j < n; j++)
+        {
+            if (a[i][j] >= 0)
+                fout << " + ";
+            fout << a[i][j] << "*x" << j + 1 << " ";
+        }
+        fout << " = " << b[i] << '\n';
+    }
+}
+
+void solve(ifstream &fin, ofstream &fout)
+{
+    //------Reading the number of linear equations of the linear system------
+    int n;
+    fin >> n;
+
+    vector<vector<double>> a(n, vector<double>(n));    // a is the coefficient matrix
+    vector<vector<double>> l(n, vector<double>(n, 0)); // l is the lower triangular matrix
+    vector<vector<double>> u(n, vector<double>(n, 0)); // u is the upper triangular matrix
+    vector<double> b(n);                               // b is the constants matrix
+
+    //-----Reading the Augmented Matrix into the Coefficient and Constant Matrices------
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            fin >> a[i][j];
+            if (i == j)
+                l[i][j] = 1;
+        }
+        fin >> b[i];
+    }
+
+    systemPrint(a, b, fout);
+
+    decompose(a, u, l, b, n);
+
+    vector<double> y(n, 0); // y=Ux;
+    forward(l, y, b, n);
+
+    //-----Handling the solution types of the system-----
+    if (u[n - 1][n - 1] == 0)
+    {
+        if (y[n - 1])
+        {
+            fout << "\nThe system has NO SOLUTION.\n";
+        }
+        else
+        {
+            fout << "\nThe system has INFINITE SOLUTIONS.\n";
+        }
+    }
+
+    else
+    {
+        fout << "\nThe system has UNIQUE SOLUTION. \n";
+
+        vector<double> x(n, 0);
+        backward(u, x, y, n);
+
+        //------Printing the solutions of the System------
+        fout << "\nSolutions: \n";
+        for (int i = 0; i < n; i++)
+        {
+            fout << "x" << i + 1 << " = " << x[i] << '\n';
+        }
+    }
+}
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    fout << "Solution of Linear System using LU Decomposition Method\nMultiple Testcases\n\n";
+
+    if (!fin)
+    {
+        fout << "File not found.\n";
+        return 0;
+    }
+
+    //------Mutiple Test Cases------
+    int t;
+    fin >> t;
+
+    int cse = 1;
+
+    while (t--)
+    {
+        for (int i = 0; i < 45; i++)
+            fout << "=";
+        fout << '\n';
+        fout << "Test case: " << cse << "\n";
+        solve(fin, fout);
+        cse++;
+    }
+}
 ```
 <br>
 
 ### 📝 LU-Factorization Method Input
 ```
-Input
+4
+3
+3 6 1 16
+2 4 3 13
+1 3 2 9
+2
+1 1 2
+2 2 4
+2
+1 1 2
+2 2 5
+5
+2 1 -1 3 2 9
+1 3 2 -1 1 8
+3 2 4 1 -2 20
+2 1 3 2 1 17
+1 -1 2 3 4 15
 ```
 <br>
 
 ### 📤 LU-Factorization Method Output
 ```
-Output
+Solution of Linear System using LU Decomposition Method
+Multiple Testcases
+
+=============================================
+Test case: 1
+The Linear System: 
+3*x1  + 6*x2  + 1*x3  = 16
+2*x1  + 4*x2  + 3*x3  = 13
+1*x1  + 3*x2  + 2*x3  = 9
+
+The system has UNIQUE SOLUTION. 
+
+Solutions: 
+x1 = 1
+x2 = 2
+x3 = 1
+=============================================
+Test case: 2
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 4
+
+The system has INFINITE SOLUTIONS.
+=============================================
+Test case: 3
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 5
+
+The system has NO SOLUTION.
+=============================================
+Test case: 4
+The Linear System: 
+2*x1  + 1*x2 -1*x3  + 3*x4  + 2*x5  = 9
+1*x1  + 3*x2  + 2*x3 -1*x4  + 1*x5  = 8
+3*x1  + 2*x2  + 4*x3  + 1*x4 -2*x5  = 20
+2*x1  + 1*x2  + 3*x3  + 2*x4  + 1*x5  = 17
+1*x1 -1*x2  + 2*x3  + 3*x4  + 4*x5  = 15
+
+The system has UNIQUE SOLUTION. 
+
+Solutions: 
+x1 = 5.15385
+x2 = -1
+x3 = 2.26154
+x4 = -0.138462
+x5 = 1.18462
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+- Partial pivoting helps avoid division by zero and minimize round-off errors.
+
+- The decomposition process can accumulate round-off errors.
+
+- Using tolerance values (e.g., 1e-9) helps identify singular or near-singular matrices
 <br>
 
 ### ➕ Advantages
 
+- Highly efficient when solving multiple systems with the same coefficient matrix but different constant vectors
+
+- The decomposition needs to be computed only once.
+
+- More efficient than Gauss elimination when solving Ax = b for multiple b vectors
+
+- Forms the basis for many advanced numerical algorithms
 <br>
 
 ### ➖ Disadvantages
 
+- Requires additional storage for both L and U matrices.
+
+- More complex to implement than simple Gauss elimination.
+
+- Not advantageous if solving only a single system with one right-hand side.
+
+- Requires the coefficient matrix to be square.
 <br>
 
 ### 🚀 Applications
 
+- Solving multiple linear systems with the same coefficient matrix
+
+- Computing matrix determinants and inverses efficiently
+
+- Numerical optimization algorithms requiring repeated linear system solutions
 <br>
 
 ---
@@ -949,49 +1260,340 @@ Output
 
 ### 📖 Matrix Inversion Method Theory
 
-<br>
+Matrix inversion method is a direct method to solve systems of linear equations by finding the inverse of the coefficient matrix. For a system `Ax = b`, if `A` is invertible (non-singular), the solution can be obtained by multiplying both sides by the inverse matrix `A⁻¹`, giving `x = A⁻¹b`.
 
-### 🔢 Mathematical Representation
+The inverse of a matrix `A` is denoted as `A⁻¹` and satisfies the property `AA⁻¹ = A⁻¹A = I`, where I is the identity matrix. The method uses Gauss-Jordan elimination to transform the augmented matrix `[A|I]` into `[I|A⁻¹]`.
+
+A matrix has an inverse if and only if its determinant is non-zero. If `det(A) = 0`, the matrix is singular and the system either has no solution or infinitely many solutions.
 
 <br>
 
 ### 🤖 Algorithm
+
+ 1. Check Determinant: Calculate `det(A)` using Gauss elimination on a copy of `A`. If `det(A) = 0`, the matrix is singular and the system has no unique solution.
+
+ 2. Create Augmented Matrix: Create augmented matrix `[A|I]` where `I` is the identity matrix of the same size as `A`.
+
+ 3. Apply Gauss-Jordan Elimination:
+    - Perform partial pivoting for to find the largest absolute values as pivot
+    - For each row `i`, make the diagonal element equal to `1` by dividing the entire row by `A[i][i]`
+    - Eliminate all other variables from rows both above and below the pivot using row operations
+    - Apply the same operations to the identity matrix portion
+
+ 4. Extract Inverse: After completion, the left side becomes `I` and the right side becomes `A⁻¹` resulting in `[I|A⁻¹]`.
+
+ 5. Matrix Multiplication: Compute `x = A⁻¹b` by multiplying the inverse matrix with the constant vector.
 
 <br>
 
 ### 💻 Matrix Inversion Method Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include <fstream>
+using namespace std;
+
+//-----Using Gauss Elimination Method to find the determinant------
+double determinant(vector<vector<double>> a, int n)
+{
+    vector<vector<double>> cof = a;
+    for (int i = 0; i < n - 1; i++)
+    {
+        int pivot = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (fabs(cof[j][i]) > fabs(cof[pivot][i]))
+                pivot = j;
+        }
+
+        if (pivot != i)
+            swap(cof[i], cof[pivot]);
+
+        if (fabs(cof[i][i]) < 1e-9)
+            continue;
+
+        double x = cof[i][i];
+
+        for (int k = i + 1; k < n; k++)
+        {
+            double y = cof[k][i];
+            for (int j = i; j < n; j++)
+            {
+                cof[k][j] = cof[k][j] - cof[i][j] * y / x;
+            }
+        }
+    }
+
+    //-----Determinant is the multiplication of the elements along the diagonal of the upper triangular matrix-----
+    double det = 1;
+    for (int i = 0; i < n; i++)
+        det *= cof[i][i];
+
+    return det;
+}
+
+//-----Using Gauss Jordan on A|I to find (A^-1)-----
+vector<vector<double>> jordan(vector<vector<double>> &a, int n)
+{
+    vector<vector<double>> id(n, vector<double>(n, 0));
+    for (int i = 0; i < n; i++)
+        id[i][i] = 1; // identity matrix
+
+    for (int i = 0; i < n; i++)
+    {
+        int pivot = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (fabs(a[j][i]) > fabs(a[pivot][i]))
+                pivot = j;
+        }
+        if (pivot != i)
+        {
+            swap(a[i], a[pivot]);
+            swap(id[i], id[pivot]);
+        }
+
+        double x = a[i][i];
+        for (int j = i; j < n; j++)
+            a[i][j] /= x;
+        for (int j = 0; j < n; j++)
+            id[i][j] /= x;
+
+        for (int k = 0; k < n; k++)
+        {
+            if (k != i && a[k][i])
+            {
+                double y = a[k][i];
+                for (int j = 0; j < n; j++)
+                {
+                    a[k][j] -= a[i][j] * y;
+                }
+                for (int j = 0; j < n; j++)
+                {
+                    id[k][j] -= id[i][j] * y;
+                }
+            }
+        }
+    }
+    return id;
+}
+
+vector<double> multiply(vector<vector<double>> inv, vector<double> &b, int n)
+{
+    vector<double> ans(n, 0);
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            ans[i] += inv[i][j] * b[j];
+        }
+    }
+    return ans;
+}
+
+void matrix_inversion(vector<vector<double>> &a, vector<double> &b, int n, ofstream &fout)
+{
+    if (!determinant(a, n))
+    {
+        fout << "\nThe system has no or infinetely many solutions.\n";
+        return;
+    }
+    else
+    {
+        fout << "\nThe system has unique solution.\n";
+    }
+
+    vector<vector<double>> inv; 
+    inv = jordan(a, n);
+
+    vector<double> x;
+    x = multiply(inv, b, n);
+
+    fout << "\nSolutions :\n";
+    for (int i = 0; i < n; i++)
+    {
+        fout << "x" << i + 1 << " = " << x[i] << '\n';
+    }
+}
+
+//------Ax = b : Printing the Linear System-------
+void systemPrint(vector<vector<double>> &a, vector<double> &b, ofstream &fout)
+{
+    fout << "The Linear System: \n";
+    int n = a.size();
+    for (int i = 0; i < n; i++)
+    {
+        fout << a[i][0] << "*x" << 1 << " ";
+        for (int j = 1; j < n; j++)
+        {
+            if (a[i][j] >= 0)
+                fout << " + ";
+            fout << a[i][j] << "*x" << j + 1 << " ";
+        }
+        fout << " = " << b[i] << '\n';
+    }
+}
+
+void solve(istream &fin, ofstream &fout)
+{
+    int n;
+    fin >> n;
+    vector<vector<double>> a(n, vector<double>(n));
+    vector<double> b(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            fin >> a[i][j];
+        }
+        fin >> b[i];
+    }
+    systemPrint(a, b, fout);
+
+    matrix_inversion(a, b, n, fout);
+}
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt"); 
+
+    fout << "Solution of Linear System using Matrix Inversion Method\nMultiple Testcases\n\n";
+
+    if (!fin)
+    {
+        fout << "File not found.\n"; 
+        return 0;
+    }
+
+    //------Mutiple Test Cases------
+    int t;
+    fin >> t;
+
+    int cse = 1;
+
+    while (t--)
+    {
+        for (int i = 0; i < 45; i++)
+            fout << "=";
+        fout << '\n';
+        fout << "Test case: " << cse << "\n";
+        solve(fin, fout);
+        cse++;
+    }
+}
 ```
 <br>
 
 ### 📝 Matrix Inversion Method Input
 ```
-Input
+4
+3
+3 6 1 16
+2 4 3 13
+1 3 2 9
+2
+1 1 2
+2 2 4
+2
+1 1 2
+2 2 5
+5
+2 1 -1 3 2 9
+1 3 2 -1 1 8
+3 2 4 1 -2 20
+2 1 3 2 1 17
+1 -1 2 3 4 15
 ```
 <br>
 
 ### 📤 Matrix Inversion Method Output
 ```
-Output
+Solution of Linear System using Matrix Inversion Method
+Multiple Testcases
+
+=============================================
+Test case: 1
+The Linear System: 
+3*x1  + 6*x2  + 1*x3  = 16
+2*x1  + 4*x2  + 3*x3  = 13
+1*x1  + 3*x2  + 2*x3  = 9
+
+The system has unique solution.
+
+Solutions :
+x1 = 1
+x2 = 2
+x3 = 1
+=============================================
+Test case: 2
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 4
+
+The system has no or infinetely many solutions.
+=============================================
+Test case: 3
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 5
+
+The system has no or infinetely many solutions.
+=============================================
+Test case: 4
+The Linear System: 
+2*x1  + 1*x2 -1*x3  + 3*x4  + 2*x5  = 9
+1*x1  + 3*x2  + 2*x3 -1*x4  + 1*x5  = 8
+3*x1  + 2*x2  + 4*x3  + 1*x4 -2*x5  = 20
+2*x1  + 1*x2  + 3*x3  + 2*x4  + 1*x5  = 17
+1*x1 -1*x2  + 2*x3  + 3*x4  + 4*x5  = 15
+
+The system has unique solution.
+
+Solutions :
+x1 = 5.15385
+x2 = -1
+x3 = 2.26154
+x4 = -0.138462
+x5 = 1.18462
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+- Numerical stability depends heavily on the condition number of the matrix
+
+- Partial pivoting is used to reduce round-off errors
+ 
+- The determinant calculation helps identify singular or near-singular matrices
 <br>
 
 ### ➕ Advantages
 
+- Provides a direct solution without iteration 
+
+- Useful when solving multiple systems with the same coefficient matrix but different constant vectors
+
+- The inverse matrix can be reused for different right-hand sides
 <br>
 
 ### ➖ Disadvantages
 
+- Computationally expensive for large matrices 
+
+- Requires extra memory to store the inverse matrix 
+
+- More prone to round-off errors compared to elimination methods
+
+- Cannot be used for singular matrices (determinant = 0)
 <br>
 
 ### 🚀 Applications
 
+- Solving multiple linear systems with the same coefficient matrix 
+
+- Applied in computer graphics for transformations 
 <br>
 
 ---
