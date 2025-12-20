@@ -500,6 +500,10 @@ Popular Open Method: <br>
 
 ### 📖 Bisection Method Theory
 
+The Bisection Method is one of the simplest numerical techniques for finding the solution of a non-linear equation f(x) = 0. It is also known as binary chopping and half interval method. <br>
+
+The main concept of this method is if the function f(x) is real and continuous in the interval a<x<b and f(a) and f(b) are of opposite sign that is , f(a) *f(b) < 0 then there exist at least one solution in this interval. <br>
+
 <br>
 
 ### 🔢 Mathematical Representation
@@ -507,6 +511,23 @@ Popular Open Method: <br>
 <br>
 
 ### 🤖 Algorithm
+
+**Step 1**: Choose two real numbers $x_1$ and $x_2$ such that the function changes sign over the interval: f($x_1$)*f($x_2$) < 0<br>
+
+**Step 2**: Calculate the midpoint $x_0$ of the current interval: $x_0$ = ($x_1$ + $x_2$)/2<br>
+
+**Step 3**: Evaluate the function at the midpoint: f($x_0$).<br>
+
+**Step 4**:  If f($x_0$) = 0, then $x_0$ is the exact root. And Stop the iteration.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If f($x_0$) * f($x_1$) < 0, the root lies between $x_1$ and $x_0$. Set $x_2$ = $x_0$.<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If f($x_0$) * f($x_2$) < 0, the root lies between $x_0$ and $x_2$. Set $x_1$ = $x_0$.<br>
+
+**Step 5**: Repeat Steps 2 through 4 until the relative error satisfies the stopping criterion:
+|($x_2$ - $x_1$)/$x_2$| < e <br>
+
+
 
 <br>
 
@@ -666,6 +687,16 @@ Roots found in the given range:
 
 ### 🎯 Accuracy Consideration
 
+1. Choose a small tolerance $E$ as the stopping criterion.<br>
+
+2. Ensure f($x_1$) * f($x_2$) < 0 before starting to guarantee a root exists within the interval.<br>
+
+3. Avoid using very large initial intervals to minimize unnecessary computations and potential overflow.<br>
+
+4. The function must be continuous within the closed interval [$x_1$, $x_2$] for the method to be valid.<br>
+
+5. Stop the algorithm only when the interval width or the relative error is sufficiently small.<br>
+
 <br>
 
 ### ➕ Advantages
@@ -695,6 +726,13 @@ Roots found in the given range:
 
 ### 🚀 Applications
 
+1. Finding roots of transcendental and algebraic equations where analytical solutions are unavailable.<br>
+
+2. Calculating critical values in thermodynamics, fluid dynamics.<br>
+
+3. Solving for balance or equilibrium states in systems influenced by non-linear physical forces.<br>
+
+4. Finding the highest or lowest points of a curve by locating the roots of the function's derivative.<br>
 <br>
 
 ---
@@ -705,6 +743,13 @@ Roots found in the given range:
 
 ### 📖 False Position Method Theory
 
+The False Position Method, also called Regula Falsi, is a numerical technique used to find the real root of a nonlinear equation 
+f(x) = 0.It is a bracketing method, meaning it starts with two initial points $x_1$ and $x_2$ such that: f($x_1$) * f($x_2$) < 0.This indicates that the function changes sign and a root lies between them. The formula for this method is : <br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $x_0$ = $x_2$ - (f($x_2$)($x_1$ - $x_2$))(f($x_1$) - f($x_2$)).
+
+
+
 <br>
 
 ### 🔢 Mathematical Representation
@@ -713,40 +758,227 @@ Roots found in the given range:
 
 ### 🤖 Algorithm
 
+**Step 1**: Choose two real numbers $x_1$ and $x_2$ such that the function changes sign over the interval: f($x_1$) * f(x_2) < 0 and Define a stopping criterion $E$.<br>
+
+**Step 2**: Calculate the estimate for the root $x_0$ using the interpolation formula: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$x_0$ = $x_1$ - f($x_1$) * ($x_2$ - $x_1$)(f($x_2$) - f($x_1$).<br>
+
+**Step 3**: Find the value of the function at the new estimate: f($x_0$).<br>
+
+**Step 4**: If f($x_0$) = 0, then the root is $x_0$ and Stop the iteration.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If f($x_0$) * f($x_1$) < 0, then set $x_2$ = $x_0$.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If f($x_0$) * f($x_2$) < 0, then set $x_1$ = $x_0$.<br>
+
+**Step 5**: Return to Step 2 and repeat until the relative error satisfies the stopping criterion:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abs($x_2$ - $x_1$)/$x_2$) < E.
 <br>
 
 ### 💻 False Position Method Code
 
 ```cpp
-code
+#include<bits/stdc++.h>
+using namespace std;
+
+void prnt() {
+    cout << "============================================\n";
+    cout << "           False Position Method\n";
+    cout << "============================================\n\n";
+}
+
+double f(double x, vector<double>& coef){
+    double res = 0.0;
+    int n = coef.size();
+    for(int i=0;i<n;i++){
+        res += coef[i]*pow(x,n-1-i);
+    }
+    return res;
+
+}
+
+void printPolynomial(vector<double> &coef){
+      cout << "\nPolynomial function:\n";
+
+      int n = coef.size() - 1;
+
+    for (int i = 0; i <= n; i++) {
+        int power = n - i;
+
+        if (coef[i] == 0) continue;
+
+        if (i != 0 && coef[i] > 0)
+            cout << " + ";
+        else if(i !=0 && coef[i]<0)
+            cout<<" - ";    
+
+        if (power == 0)
+            cout << fabs(coef[i]);
+        else if (power == 1)
+            cout << fabs(coef[i]) << "x";
+        else if(fabs(coef[i]) >1)
+            cout << fabs(coef[i]) << "x^" << power;
+        else 
+            cout << "x^" << power;
+
+    }
+
+    cout << " = 0\n";
+    return;
+}
+
+float false_position(vector<double>& coef,double x1, double x2, double e){
+    double x0,fx0;
+    do{
+         x0 = x1 - f(x1, coef) * (x2 - x1) /
+                    (f(x2, coef) - f(x1, coef));
+
+    fx0 = f(x0,coef);
+    if(fx0 == 0.0) return x0;
+
+    else if(f(x1,coef)*fx0<0.0) x2 = x0;
+    else x2 = x0;
+    }while(abs(fx0)>e);
+
+    return x0;
+}
+
+int main(){
+
+
+
+    double x,pos,neg,e = 0.001,mid;
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    prnt();
+    int n;
+    cin>>n;
+
+    vector<double>coef(n+1);
+
+
+    for (int i = 0; i <= n; i++) {
+        cin >> coef[i];
+    }
+    double L, R, h;
+
+    cin >> L >> R;
+
+    cin >> h;
+
+    double x1 = L, x2 = L + h;
+
+    vector<double> roots;
+    while (x2 <= R) {
+        if (f(x1, coef) * f(x2, coef) < 0) {
+            pos = x2;
+            neg = x1;
+            roots.push_back(false_position(coef, x1, x2, e));
+        x1 = x2;
+        x2 += h;
+        continue;
+
+        }
+        x1 = x2;
+        x2 += h;
+    }
+
+    printPolynomial(coef);
+
+
+    cout << "\nRoots found in the given range:\n";int i = 0;
+    for (double root : roots) {
+        i++;
+        cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
+    }
+
+    return 0;
+}
+
+
 ```
 <br>
 
 ### 📝 False Position Method Input
 ```
-Input
+6
+1 -21 175 -735 1624 -1764 720
+-5 10
+0.1
+
 ```
 <br>
 
 ### 📤 False Position Method Output
 ```
-Output
+============================================
+           False Position Method
+============================================
+
+
+Polynomial function:
+x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
+
+Roots found in the given range:
+	x1 = 1.000000
+	x2 = 2.000000
+	x3 = 3.000000
+	x4 = 4.000000
+	x5 = 5.000000
+	x6 = 6.000000
+
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+1. Choose a sufficiently small tolerance 𝐸.<br>
+
+2. Ensure the initial interval satisfies f($x_1$) * f($x_2$) < 0.<br>
+
+3. Need to use double-precision floating values.<br>
+
+4. Check sign change carefully at each step.<br>
+
+5. Ensure the function is continuous in the interval.<br>
+
 <br>
 
 ### ➕ Advantages
+
+1. Guaranteed convergence if f($x_1$) * f($x_2$) < 0.<br>
+
+2. The algorithm always keeps the root trapped within the interval, providing high reliability.<br>
+
+3. Faster than the Bisection method in many cases.<br>
+
+4. The medthod is Simple and easy to implement.<br>
+
+5. No derivative needed.
 
 <br>
 
 ### ➖ Disadvantages
 
+1. Depending on the curve of the function, convergence can become slow.<br>
+
+2. One endpoint may remain fixed for many iterations.<br>
+
+3. If the function values are not well-balanced across the interval, the process can stagnate.<br>
+
+4. For certain non-linear shapes, it may still require a high number of iterations to achieve extreme precision.<br>
+
 <br>
 
 ### 🚀 Applications
+
+1. Solving nonlinear algebraic equations.<br>
+
+2. Finding roots in engineering design problems.<br>
+
+3. Solving for equilibrium points in systems involving non-linear forces or complex potential energy surfaces.<br>
+
+4. Identifying the local extrema of a function by finding the roots of its first derivative.<br>
 
 <br>
 
