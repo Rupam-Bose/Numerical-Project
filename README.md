@@ -411,6 +411,11 @@ Numerical-Methods-Project/
 
 
 ```
+<br>
+
+[Back to Top](#-Table-of-Contents)
+
+---
 
 # Solution of Linear Equations
 
@@ -715,6 +720,8 @@ x5 = 1.18462
 ```
 <br>
 
+---
+
 ### 🎯 Accuracy Consideration
 
 - Floating point error may occur due to division and subtraction operations.
@@ -748,7 +755,9 @@ x5 = 1.18462
 
 - Used as foundation for LU decomposition and matrix inversion
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Gauss-Jordan Elimination Method
@@ -1044,7 +1053,9 @@ x5 = 1.18462
 
 - Circuit analysis and network flow problems
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## LU-Factorization Method
@@ -1416,7 +1427,9 @@ x5 = 1.18462
 
 - Numerical optimization algorithms requiring repeated linear system solutions
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Matrix Inversion Method
@@ -1760,7 +1773,9 @@ x5 = 1.18462
 
 - Applied in computer graphics for transformations 
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 # Solution of Non-Linear Equations
@@ -2052,7 +2067,9 @@ The task is completed
 
 4. Finding the highest or lowest points of a curve by locating the roots of the function's derivative.<br>
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## False Position Method
@@ -2318,7 +2335,9 @@ The task is completed
 
 4. Identifying the local extrema of a function by finding the roots of its first derivative.<br>
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Newton-Raphson Method
@@ -2580,7 +2599,9 @@ The task is completed
 
 5. Solving stability equations and processing signals in automated control applications.<br>
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Secant Method
@@ -2830,7 +2851,9 @@ The task is completed
 
 4. Can able to solve physics and applied mathematics problems.<br>
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 
@@ -3094,7 +3117,9 @@ Estimate the value of y for x = 6 : 12
 
 - Finding relationships between variables in scientific experiments
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Least Square Regression (Transcendental Equation)
@@ -3391,7 +3416,9 @@ Estimate the value of y for x = 6 : 189.761
 
 - Learning curves
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Least Square Regression (Polynomial Equation)
@@ -3702,7 +3729,9 @@ y = 5 + 1x - 2x^2 + 1x^3
  
 - Modeling non-linear relationships in data science
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 
@@ -3878,7 +3907,9 @@ Print the answer: 165
 - Engineering and scientific computations.
 - Estimation of missing values in tabulated data.
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Newton Backward Interpolation Method
@@ -4056,7 +4087,9 @@ Print the answer: 105
 - Engineering and scientific problem solving.
 - Interpolation of values near the upper boundary of datasets.
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Newton Divided Difference Interpolation Method
@@ -4109,7 +4142,9 @@ Output
 ### 🚀 Applications
 
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 
@@ -4170,7 +4205,9 @@ Output
 ### 🚀 Applications
 - Aplications
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 
@@ -4362,7 +4399,9 @@ q
 
 3. Used in computer simulations and numerical analysis to approximate definite integrals.<br>
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Simpson 3/8 Rule
@@ -4554,7 +4593,9 @@ q
 
 3. Useful in computer simulations and numerical analysis for approximating integrals.<br>
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 
@@ -4615,7 +4656,9 @@ Output
 ### 🚀 Applications
 - Applications
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 ## Differentiation Using Backward Interpolation
@@ -4669,7 +4712,9 @@ Output
 ### 🚀 Applications
 - Applications
 <br>
+
 [Back to Top](#-Table-of-Contents)
+
 ---
 
 
