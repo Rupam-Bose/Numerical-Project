@@ -1601,16 +1601,19 @@ x5 = 1.18462
 # Solution of Non-Linear Equations
 
 A non-linear equation is an equation in which the highest power of the variable is greater than 1 or the variables appear in non-linear forms (squared, cubed, trigonometric, logarithmic, etc). <br>
-Example: x<sup>2</sup> + 4x - 10 = 0<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e<sup>x</sup> - 4x = 0<br>
-There are some techniques to solve the non-linear equations. Such as  
+Example:
+```
+x₂ + 4x₁ = 10
+e^x - 4·x = 0
+```
+There are some techniques to solve the non-linear equations. Such as
 
 -> **Bracketing Methods** <br>
 
 -> **Open Methods** <br>
 
 
-**Bracketing methods** are a class of numerical algorithms used to find the roots of a non-linear equation f(x) = 0. They are called **bracketing** methods because they require two initial guesses, a and b, that "bracket" or surround the root between them. <br>
+**Bracketing methods** are a class of numerical algorithms used to find the roots of a non-linear equation `f(x) = 0`. They are called **bracketing** methods because they require two initial guesses, a and b, that "bracket" or surround the root between them. <br>
 
 Popular Bracketing Method: <br>
 
@@ -1618,11 +1621,11 @@ Popular Bracketing Method: <br>
 
 2. **False Position Method**<br>
 
-**Open methods** are iterative techniques used to find the roots of a non-linear equation f(x) = 0 without needing an interval that brackets the root. Open methods typically use a single starting value or two starting values.<br>
+**Open methods** are iterative techniques used to find the roots of a non-linear equation `f(x) = 0` without needing an interval that brackets the root. Open methods typically use a single starting value or two starting values.<br>
 
 Popular Open Method: <br>
 
-1. **Newton-Raphson Method**  <br>
+1. **Newton-Raphson Method** <br>
 
 2. **Secant Method**<br>
 
@@ -1634,9 +1637,9 @@ Popular Open Method: <br>
 
 ### 📖 Bisection Method Theory
 
-The Bisection Method is one of the simplest numerical techniques for finding the solution of a non-linear equation f(x) = 0. It is also known as binary chopping and half interval method. <br>
+The Bisection Method is one of the simplest numerical techniques for finding the solution of a non-linear equation `f(x) = 0`. It is also known as binary chopping and half interval method. <br>
 
-The main concept of this method is if the function f(x) is real and continuous in the interval a<x<b and f(a) and f(b) are of opposite sign that is , f(a) *f(b) < 0 then there exist at least one solution in this interval. <br>
+The main concept of this method is if the function `f(x)` is real and continuous in the interval `a<x<b` and `f(a)` and `f(b)` are of opposite sign that is , `f(a) *f(b) < 0 `then there exist at least one solution in this interval. <br>
 
 <br>
 
@@ -1646,22 +1649,20 @@ The main concept of this method is if the function f(x) is real and continuous i
 
 ### 🤖 Algorithm
 
-**Step 1**: Choose two real numbers $x_1$ and $x_2$ such that the function changes sign over the interval: f($x_1$)*f($x_2$) < 0<br>
+**Step 1**: Choose two real numbers `x₁` and `x₂` such that the function changes sign over the interval: `f(x₁) * f(x₂) < 0`<br>
 
-**Step 2**: Calculate the midpoint $x_0$ of the current interval: $x_0$ = ($x_1$ + $x_2$)/2<br>
+**Step 2**: Calculate the midpoint `x₀` of the current interval: `x₀ = (x₁ + x₂)/2`<br>
 
-**Step 3**: Evaluate the function at the midpoint: f($x_0$).<br>
+**Step 3**: Evaluate the function at the midpoint: `f(x₀)`.<br>
 
-**Step 4**:  If f($x_0$) = 0, then $x_0$ is the exact root. And Stop the iteration.<br>
+**Step 4**: If `f(x₀) = 0`, then `x₀` is the exact root. And Stop the iteration.<br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If f($x_0$) * f($x_1$) < 0, the root lies between $x_1$ and $x_0$. Set $x_2$ = $x_0$.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If `f(x₀) * f(x₂) < 0`, the root lies between `x₁` and `x₀`. Set `x₂ = x₀`.<br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If f($x_0$) * f($x_2$) < 0, the root lies between $x_0$ and $x_2$. Set $x_1$ = $x_0$.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If `f(x₀) * f(x₂) < 0`, the root lies between `x₀` and `x₂`. Set `x₁ = x₀`.<br>
 
 **Step 5**: Repeat Steps 2 through 4 until the relative error satisfies the stopping criterion:
-|($x_2$ - $x_1$)/$x_2$| < e <br>
-
-
+```|(x₂ - x₁)/x₂| < e``` <br>
 
 <br>
 
@@ -1672,129 +1673,129 @@ The main concept of this method is if the function f(x) is real and continuous i
 using namespace std;
 
 void prnt() {
-    cout << "============================================\n";
-    cout << "            Bisection Method\n";
-    cout << "============================================\n\n";
+cout << "============================================\n";
+cout << " Bisection Method\n";
+cout << "============================================\n\n";
 }
 
 void RR(){
-    cout << "============================================\n";
-    cout<<"                    Result\n";
-    cout << "============================================\n";
+cout << "============================================\n";
+cout<<" Result\n";
+cout << "============================================\n";
 }
 
 void p(){
-    cout << "============================================\n";
-    cout<<"            The task is completed\n";
-    cout << "============================================\n";
+cout << "============================================\n";
+cout<<" The task is completed\n";
+cout << "============================================\n";
 }
 
 double f(double x, vector<double>& coef){
-    double res = 0.0;
-    int n = coef.size();
-    for(int i=0;i<n;i++){
-        res += coef[i]*pow(x,n-1-i);
-    }
-    return res;
+double res = 0.0;
+int n = coef.size();
+for(int i=0;i<n;i++){
+res += coef[i]*pow(x,n-1-i);
+}
+return res;
 
 }
 
 void printPolynomial(vector<double> coef){
-      cout << "\nPolynomial function:\n";
+cout << "\nPolynomial function:\n";
 
-      int n = coef.size() - 1;
+int n = coef.size() - 1;
 
-    for (int i = 0; i <= n; i++) {
-        int power = n - i;
+for (int i = 0; i <= n; i++) {
+int power = n - i;
 
-        if (coef[i] == 0) continue;
+if (coef[i] == 0) continue;
 
-        if (i != 0 && coef[i] > 0)
-            cout << " + ";
-        else if(i !=0 && coef[i]<0)
-            cout<<" - ";    
+if (i != 0 && coef[i] > 0)
+cout << " + ";
+else if(i !=0 && coef[i]<0)
+cout<<" - ";
 
-        if (power == 0)
-            cout << fabs(coef[i]);
-        else if (power == 1)
-            cout << fabs(coef[i]) << "x";
-        else if(fabs(coef[i]) >1)
-            cout << fabs(coef[i]) << "x^" << power;
-        else 
-            cout << "x^" << power;
+if (power == 0)
+cout << fabs(coef[i]);
+else if (power == 1)
+cout << fabs(coef[i]) << "x";
+else if(fabs(coef[i]) >1)
+cout << fabs(coef[i]) << "x^" << power;
+else
+cout << "x^" << power;
 
-    }
+}
 
-    cout << " = 0\n";
-    return;
+cout << " = 0\n";
+return;
 }
 
 double bisectionMethod(vector<double>& coef, double L, double R, double e){
-    double pos = R, neg = L, mid, x;
+double pos = R, neg = L, mid, x;
 
-    do{
-         mid = (pos+neg)/2.0;
-         x = f(mid,coef);
-         if(f(neg,coef)*x<0.0){pos = mid;}
-         else
-            neg = mid;
-    }while(fabs(x)>e);
+do{
+mid = (pos+neg)/2.0;
+x = f(mid,coef);
+if(f(neg,coef)*x<0.0){pos = mid;}
+else
+neg = mid;
+}while(fabs(x)>e);
 
-    return mid;
+return mid;
 }
 
 int main(){
 
-    double x,pos,neg,e = 0.001,mid;
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    prnt();
-    int n;
+double x,pos,neg,e = 0.001,mid;
+freopen("input.txt", "r", stdin);
+freopen("output.txt", "w", stdout);
+prnt();
+int n;
 
-    cin>>n;
+cin>>n;
 
-    vector<double>coef(n+1);
-
-
-    for (int i = 0; i <= n; i++) {
-        cin >> coef[i];
-    }
-    double L, R, h;
-
-    cin >> L >> R;
+vector<double>coef(n+1);
 
 
-    cin >> h;
+for (int i = 0; i <= n; i++) {
+cin >> coef[i];
+}
+double L, R, h;
 
-    double x1 = L, x2 = L + h;
-    bool found = false;
+cin >> L >> R;
 
-    vector<double> roots;
-    while (x2 <= R) {
-        if (f(x1, coef) * f(x2, coef) < 0) {
-            pos = x2;
-            neg = x1;
-            roots.push_back(bisectionMethod(coef, x1, x2, e));
-        x1 = x2;
-        x2 += h;
-        continue;
 
-        }
-        x1 = x2;
-        x2 += h;
-    }
+cin >> h;
 
-    printPolynomial(coef);
+double x1 = L, x2 = L + h;
+bool found = false;
 
- RR();
-    cout << "\nRoots found in the given range:\n";int i = 0;
+vector<double> roots;
+while (x2 <= R) {
+if (f(x1, coef) * f(x2, coef) < 0) {
+pos = x2;
+neg = x1;
+roots.push_back(bisectionMethod(coef, x1, x2, e));
+x1 = x2;
+x2 += h;
+continue;
 
-    for (double root : roots) {
-        i++;
-        cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
-    }
+}
+x1 = x2;
+x2 += h;
+}
+
+printPolynomial(coef);
+
+RR();
+cout << "\nRoots found in the given range:\n";int i = 0;
+
+for (double root : roots) {
+i++;
+cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
+}
 p();
-    return 0;
+return 0;
 }
 
 ```
@@ -1813,25 +1814,25 @@ p();
 ### 📤 Bisection Method Output
 ```
 ============================================
-            Bisection Method
+Bisection Method
 ============================================
 
 
 Polynomial function:
 x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
 ============================================
-                    Result
+Result
 ============================================
 
 Roots found in the given range:
-	x1 = 1.000006
-	x2 = 2.000024
-	x3 = 2.999951
-	x4 = 4.000049
-	x5 = 4.999976
-	x6 = 6.000006
+x1 = 1.000006
+x2 = 2.000024
+x3 = 2.999951
+x4 = 4.000049
+x5 = 4.999976
+x6 = 6.000006
 ============================================
-            The task is completed
+The task is completed
 ============================================
 
 ```
@@ -1839,13 +1840,13 @@ Roots found in the given range:
 
 ### 🎯 Accuracy Consideration
 
-1. Choose a small tolerance $E$ as the stopping criterion.<br>
+1. Choose a small tolerance `E` as the stopping criterion.<br>
 
-2. Ensure f($x_1$) * f($x_2$) < 0 before starting to guarantee a root exists within the interval.<br>
+2. Ensure `f(x₁) * f(x₂) < 0` before starting to guarantee a root exists within the interval.<br>
 
 3. Avoid using very large initial intervals to minimize unnecessary computations and potential overflow.<br>
 
-4. The function must be continuous within the closed interval [$x_1$, $x_2$] for the method to be valid.<br>
+4. The function must be continuous within the closed interval `[x₁,x₂]` for the method to be valid.<br>
 
 5. Stop the algorithm only when the interval width or the relative error is sufficiently small.<br>
 
@@ -1855,20 +1856,20 @@ Roots found in the given range:
 
 1. This method is Simple and Easy to Understand.<br>
 
-2. If the function changes sign over [a, b], the method always converges to a root.<br>
+2. If the function changes sign over `[a, b]`, the method always converges to a root.<br>
 
 3. Works with only functional value not the differential value. <br>
 
-4. Bisection method Works on Any Continuous Function<br> 
+4. Bisection method Works on Any Continuous Function<br>
 
-5. After n iterations, the maximum error is   (b-a)/2<sup>n</sup><br>
+5. After n iterations, the maximum error is (b-a)/2<sup>n</sup><br>
 <br>
 
 ### ➖ Disadvantages
 
 1. Bisection method takes many iterations. That’s why this method is slower than Newton-Raphson Method. <br>
 
-2. Bisection method only works when f(a) * f(b)<0.It Fails when both endpoints have same sign. <br>
+2. Bisection method only works when `f(a) * f(b)<0.`It Fails when both endpoints have same sign. <br>
 
 3. If function touches the axis without crossing the axis, bisection may unable to solve it. <br>
 
@@ -1895,10 +1896,10 @@ Roots found in the given range:
 
 ### 📖 False Position Method Theory
 
-The False Position Method, also called Regula Falsi, is a numerical technique used to find the real root of a nonlinear equation 
+The False Position Method, also called Regula Falsi, is a numerical technique used to find the real root of a nonlinear equation
 f(x) = 0.It is a bracketing method, meaning it starts with two initial points $x_1$ and $x_2$ such that: f($x_1$) * f($x_2$) < 0.This indicates that the function changes sign and a root lies between them. The formula for this method is : <br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $x_0$ = $x_2$ - (f($x_2$)($x_1$ - $x_2$))(f($x_1$) - f($x_2$)).
+```x₀ = x₁ - f(x₁) * (x₂ - x₁)(f(x₂) - f(x₁)```<br>
 
 
 
@@ -1910,21 +1911,21 @@ f(x) = 0.It is a bracketing method, meaning it starts with two initial points $x
 
 ### 🤖 Algorithm
 
-**Step 1**: Choose two real numbers $x_1$ and $x_2$ such that the function changes sign over the interval: f($x_1$) * f(x_2) < 0 and Define a stopping criterion $E$.<br>
+**Step 1**: Choose two real numbers `x₁` and `x₂` such that the function changes sign over the interval: `f(x₁) * f(x₂) < 0` and Define a stopping criterion $E$.<br>
 
 **Step 2**: Calculate the estimate for the root $x_0$ using the interpolation formula: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$x_0$ = $x_1$ - f($x_1$) * ($x_2$ - $x_1$)(f($x_2$) - f($x_1$).<br>
+```x₀ = x₁ - f(x₁) * (x₂ - x₁)(f(x₂) - f(x₁)```<br>
 
-**Step 3**: Find the value of the function at the new estimate: f($x_0$).<br>
+**Step 3**: Find the value of the function at the new estimate: `f(x₀)`.<br>
 
-**Step 4**: If f($x_0$) = 0, then the root is $x_0$ and Stop the iteration.
+**Step 4**: If `f(x₀) = 0`, then the root is `x₀` and Stop the iteration.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If f($x_0$) * f($x_1$) < 0, then set $x_2$ = $x_0$.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If `f(x₀) * f(x₁) < 0`, then set `x₂ = x₀`.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If f($x_0$) * f($x_2$) < 0, then set $x_1$ = $x_0$.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If `f(x₀) * f(x₂) < 0`, then set `x₁ = x₀`.<br>
 
 **Step 5**: Return to Step 2 and repeat until the relative error satisfies the stopping criterion:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abs($x_2$ - $x_1$)/$x_2$) < E.
+```abs(x₂ - x₁)/x₂) < E```
 <br>
 
 ### 💻 False Position Method Code
@@ -1934,131 +1935,131 @@ f(x) = 0.It is a bracketing method, meaning it starts with two initial points $x
 using namespace std;
 
 void prnt() {
-    cout << "============================================\n";
-    cout << "           False Position Method\n";
-    cout << "============================================\n\n";
+cout << "============================================\n";
+cout << " False Position Method\n";
+cout << "============================================\n\n";
 }
 
 void RR(){
-    cout << "============================================\n";
-    cout<<"                    Result\n";
-    cout << "============================================\n";
+cout << "============================================\n";
+cout<<" Result\n";
+cout << "============================================\n";
 }
 
 void p(){
-    cout << "============================================\n";
-    cout<<"            The task is completed\n";
-    cout << "============================================\n";
+cout << "============================================\n";
+cout<<" The task is completed\n";
+cout << "============================================\n";
 }
 
 double f(double x, vector<double>& coef){
-    double res = 0.0;
-    int n = coef.size();
-    for(int i=0;i<n;i++){
-        res += coef[i]*pow(x,n-1-i);
-    }
-    return res;
+double res = 0.0;
+int n = coef.size();
+for(int i=0;i<n;i++){
+res += coef[i]*pow(x,n-1-i);
+}
+return res;
 
 }
 
 void printPolynomial(vector<double> &coef){
-      cout << "\nPolynomial function:\n";
+cout << "\nPolynomial function:\n";
 
-      int n = coef.size() - 1;
+int n = coef.size() - 1;
 
-    for (int i = 0; i <= n; i++) {
-        int power = n - i;
+for (int i = 0; i <= n; i++) {
+int power = n - i;
 
-        if (coef[i] == 0) continue;
+if (coef[i] == 0) continue;
 
-        if (i != 0 && coef[i] > 0)
-            cout << " + ";
-        else if(i !=0 && coef[i]<0)
-            cout<<" - ";    
+if (i != 0 && coef[i] > 0)
+cout << " + ";
+else if(i !=0 && coef[i]<0)
+cout<<" - ";
 
-        if (power == 0)
-            cout << fabs(coef[i]);
-        else if (power == 1)
-            cout << fabs(coef[i]) << "x";
-        else if(fabs(coef[i]) >1)
-            cout << fabs(coef[i]) << "x^" << power;
-        else 
-            cout << "x^" << power;
+if (power == 0)
+cout << fabs(coef[i]);
+else if (power == 1)
+cout << fabs(coef[i]) << "x";
+else if(fabs(coef[i]) >1)
+cout << fabs(coef[i]) << "x^" << power;
+else
+cout << "x^" << power;
 
-    }
+}
 
-    cout << " = 0\n";
-    return;
+cout << " = 0\n";
+return;
 }
 
 float false_position(vector<double>& coef,double x1, double x2, double e){
-    double x0,fx0;
-    do{
-         x0 = x1 - f(x1, coef) * (x2 - x1) /
-                    (f(x2, coef) - f(x1, coef));
+double x0,fx0;
+do{
+x0 = x1 - f(x1, coef) * (x2 - x1) /
+(f(x2, coef) - f(x1, coef));
 
-    fx0 = f(x0,coef);
-    if(fx0 == 0.0) return x0;
+fx0 = f(x0,coef);
+if(fx0 == 0.0) return x0;
 
-    else if(f(x1,coef)*fx0<0.0) x2 = x0;
-    else x2 = x0;
-    }while(abs(fx0)>e);
+else if(f(x1,coef)*fx0<0.0) x2 = x0;
+else x2 = x0;
+}while(abs(fx0)>e);
 
-    return x0;
+return x0;
 }
 
 int main(){
 
 
 
-    double x,pos,neg,e = 0.001,mid;
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    prnt();
-    int n;
-    cin>>n;
+double x,pos,neg,e = 0.001,mid;
+freopen("input.txt", "r", stdin);
+freopen("output.txt", "w", stdout);
+prnt();
+int n;
+cin>>n;
 
-    vector<double>coef(n+1);
-
-
-    for (int i = 0; i <= n; i++) {
-        cin >> coef[i];
-    }
-    double L, R, h;
-
-    cin >> L >> R;
-
-    cin >> h;
-
-    double x1 = L, x2 = L + h;
-
-    vector<double> roots;
-    while (x2 <= R) {
-        if (f(x1, coef) * f(x2, coef) < 0) {
-            pos = x2;
-            neg = x1;
-            roots.push_back(false_position(coef, x1, x2, e));
-        x1 = x2;
-        x2 += h;
-        continue;
-
-        }
-        x1 = x2;
-        x2 += h;
-    }
-
-    printPolynomial(coef);
+vector<double>coef(n+1);
 
 
-    RR();
-    cout << "\nRoots found in the given range:\n";int i = 0;
-    for (double root : roots) {
-        i++;
-        cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
-    }
-    p();
+for (int i = 0; i <= n; i++) {
+cin >> coef[i];
+}
+double L, R, h;
 
-    return 0;
+cin >> L >> R;
+
+cin >> h;
+
+double x1 = L, x2 = L + h;
+
+vector<double> roots;
+while (x2 <= R) {
+if (f(x1, coef) * f(x2, coef) < 0) {
+pos = x2;
+neg = x1;
+roots.push_back(false_position(coef, x1, x2, e));
+x1 = x2;
+x2 += h;
+continue;
+
+}
+x1 = x2;
+x2 += h;
+}
+
+printPolynomial(coef);
+
+
+RR();
+cout << "\nRoots found in the given range:\n";int i = 0;
+for (double root : roots) {
+i++;
+cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
+}
+p();
+
+return 0;
 }
 
 
@@ -2079,25 +2080,25 @@ int main(){
 ### 📤 False Position Method Output
 ```
 ============================================
-           False Position Method
+False Position Method
 ============================================
 
 
 Polynomial function:
 x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
 ============================================
-                    Result
+Result
 ============================================
 
 Roots found in the given range:
-	x1 = 1.000000
-	x2 = 2.000000
-	x3 = 3.000000
-	x4 = 4.000000
-	x5 = 5.000000
-	x6 = 6.000000
+x1 = 1.000000
+x2 = 2.000000
+x3 = 3.000000
+x4 = 4.000000
+x5 = 5.000000
+x6 = 6.000000
 ============================================
-            The task is completed
+The task is completed
 ============================================
 ```
 <br>
@@ -2106,7 +2107,7 @@ Roots found in the given range:
 
 1. Choose a sufficiently small tolerance 𝐸.<br>
 
-2. Ensure the initial interval satisfies f($x_1$) * f($x_2$) < 0.<br>
+2. Ensure the initial interval satisfies `f(a) * f(b) < 0`.<br>
 
 3. Need to use double-precision floating values.<br>
 
@@ -2118,7 +2119,7 @@ Roots found in the given range:
 
 ### ➕ Advantages
 
-1. Guaranteed convergence if f($x_1$) * f($x_2$) < 0.<br>
+1. Guaranteed convergence if f`(a) * f(b) < 0`.<br>
 
 2. The algorithm always keeps the root trapped within the interval, providing high reliability.<br>
 
@@ -2162,16 +2163,16 @@ Roots found in the given range:
 
 ### 📖 Newton-Raphson Method Theory
 
-The Newton-Raphson Method is a high-speed numerical technique used to find the root of a nonlinear equation f(x) = 0.<br>
+The Newton-Raphson Method is a high-speed numerical technique used to find the root of a nonlinear equation `f(x) = 0`.<br>
 
-The process begins with an initial guess, $x_0$.A tangent is drawn to the curve at that point to see where it crosses the x-axis.That crossing point becomes the next guess, repeating until the values move closer to the actual root.<br>
+The process begins with an initial guess, `x₀`.A tangent is drawn to the curve at that point to see where it crosses the x-axis.That crossing point becomes the next guess, repeating until the values move closer to the actual root.<br>
 
 The formula :<br>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x<sub>n+1</sub>​ = x<sub>n</sub> ​− f<sup>′</sup>(x<sub>n</sub>​)/f(x<sub>n</sub>​)<br>
 
 The formula uses both the function value and its derivative so each step is guided by the slope of the curve.If the initial guess is close and the derivative is not zero, the accuracy nearly doubles with every step.<br>​
- 
+
 <br>
 
 ### 🔢 Mathematical Representation
@@ -2182,13 +2183,13 @@ The formula uses both the function value and its derivative so each step is guid
 
 **Step 1**: Find f<sup>'</sup>($x_n$).<br>
 
-**Step 2**: Choose 2 real numbers a and b such that f(a) * f(b) < 0 and stopping criterion E. If such $a$ and $b$ do not exist, then randomly guess a.<br>
+**Step 2**: Choose 2 real numbers a and b such that `f(a) * f(b) < 0` and stopping criterion E. If such `a` and `b` do not exist, then randomly guess a.<br>
 
-**Step 3**: Assume $x_0$ = a.<br>
+**Step 3**: Assume `x₀ = a`.<br>
 
 **Step 4**: Find x<sub>n+1</sub>.<br>
 
-**Step 5**:  If |x<sub>n+1</sub> - $x_n$| < E, then the root is x<sub>n+1</sub> and stop. Otherwise, set $x_n$ = x<sub>n+1</sub> and repeat the iteration.<br>
+**Step 5**: If |x<sub>n+1</sub> - $x_n$| < E, then the root is x<sub>n+1</sub> and stop. Otherwise, set $x_n$ = x<sub>n+1</sub> and repeat the iteration.<br>
 
 <br>
 
@@ -2199,129 +2200,129 @@ The formula uses both the function value and its derivative so each step is guid
 using namespace std;
 
 void prnt() {
-    cout << "============================================\n";
-    cout << "           Newton Rapshon Method\n";
-    cout << "============================================\n\n";
+cout << "============================================\n";
+cout << " Newton Rapshon Method\n";
+cout << "============================================\n\n";
 }
 
 void RR(){
-    cout << "============================================\n";
-    cout<<"                    Result\n";
-    cout << "============================================\n";
+cout << "============================================\n";
+cout<<" Result\n";
+cout << "============================================\n";
 }
 
 void p(){
-    cout << "============================================\n";
-    cout<<"            The task is completed\n";
-    cout << "============================================\n";
+cout << "============================================\n";
+cout<<" The task is completed\n";
+cout << "============================================\n";
 }
 
 double f(double x, vector<double>& coef){
-    double res = 0.0;
-    int n = coef.size();
-    for(int i=0;i<n;i++){
-        res += coef[i]*pow(x,n-1-i);
-    }
-    return res;
+double res = 0.0;
+int n = coef.size();
+for(int i=0;i<n;i++){
+res += coef[i]*pow(x,n-1-i);
+}
+return res;
 
 }
 
 void printPolynomial(vector<double> &coef){
-      cout << "\nPolynomial function:\n";
+cout << "\nPolynomial function:\n";
 
-      int n = coef.size() - 1;
+int n = coef.size() - 1;
 
-    for (int i = 0; i <= n; i++) {
-        int power = n - i;
+for (int i = 0; i <= n; i++) {
+int power = n - i;
 
-        if (coef[i] == 0) continue;
-        if (i != 0 && coef[i] > 0)
-            cout << " + ";
-        else if(i !=0 && coef[i]<0)
-            cout<<" - ";    
-        if (power == 0)
-            cout << fabs(coef[i]);
-        else if (power == 1)
-            cout << fabs(coef[i]) << "x";
-        else if(fabs(coef[i]) >1)
-            cout << fabs(coef[i]) << "x^" << power;
-        else 
-            cout << "x^" << power;
+if (coef[i] == 0) continue;
+if (i != 0 && coef[i] > 0)
+cout << " + ";
+else if(i !=0 && coef[i]<0)
+cout<<" - ";
+if (power == 0)
+cout << fabs(coef[i]);
+else if (power == 1)
+cout << fabs(coef[i]) << "x";
+else if(fabs(coef[i]) >1)
+cout << fabs(coef[i]) << "x^" << power;
+else
+cout << "x^" << power;
 
-    }
+}
 
-    cout << " = 0\n";
-    return;
+cout << " = 0\n";
+return;
 }
 
 double differentiate(vector<double>coef, double x) {
-    double h = 1e-6;   
-    return (f(x + h,coef) - f(x - h,coef)) / (2 * h);
+double h = 1e-6;
+return (f(x + h,coef) - f(x - h,coef)) / (2 * h);
 }
 
 double newton_raphson(vector<double>coef, double initial_guess, double e) {
-    double x0 = initial_guess;
-    double x1;
-    while (true) {
-        double f0 = f(x0, coef);
-        double df0 = differentiate(coef, x0);
-        x1 = x0 - f0 / df0;
-        if (fabs(f(x1, coef)) < e) {
-            break;
-        }
-        x0 = x1;
-    }
-    return x1;
+double x0 = initial_guess;
+double x1;
+while (true) {
+double f0 = f(x0, coef);
+double df0 = differentiate(coef, x0);
+x1 = x0 - f0 / df0;
+if (fabs(f(x1, coef)) < e) {
+break;
+}
+x0 = x1;
+}
+return x1;
 }
 
 int main() {
-    double x,pos,neg,e = 0.001,mid;
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    prnt();
-    int n;
-    cin>>n;
+double x,pos,neg,e = 0.001,mid;
+freopen("input.txt", "r", stdin);
+freopen("output.txt", "w", stdout);
+prnt();
+int n;
+cin>>n;
 
-    vector<double>coef(n+1);
-
-
-    for (int i = 0; i <= n; i++) {
-        cin >> coef[i];
-    }
-    double L, R, h;
-
-    cin >> L >> R;
-
-    cin >> h;
-
-    double x1 = L, x2 = L + h;
-
-    vector<double> roots;
-    while (x2 <= R) {
-        if (f(x1, coef) * f(x2, coef) < 0) {
-            pos = x2;
-            neg = x1;
-            roots.push_back(newton_raphson(coef,x2,e));
-        x1 = x2;
-        x2 += h;
-        continue;
-
-        }
-        x1 = x2;
-        x2 += h;
-    }
-
-    printPolynomial(coef);
+vector<double>coef(n+1);
 
 
-    RR();
-    cout << "\nRoots found in the given range:\n";int i = 0;
-    for (double root : roots) {
-        i++;
-        cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
-    }
-    p();
-    return 0;
+for (int i = 0; i <= n; i++) {
+cin >> coef[i];
+}
+double L, R, h;
+
+cin >> L >> R;
+
+cin >> h;
+
+double x1 = L, x2 = L + h;
+
+vector<double> roots;
+while (x2 <= R) {
+if (f(x1, coef) * f(x2, coef) < 0) {
+pos = x2;
+neg = x1;
+roots.push_back(newton_raphson(coef,x2,e));
+x1 = x2;
+x2 += h;
+continue;
+
+}
+x1 = x2;
+x2 += h;
+}
+
+printPolynomial(coef);
+
+
+RR();
+cout << "\nRoots found in the given range:\n";int i = 0;
+for (double root : roots) {
+i++;
+cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
+}
+p();
+return 0;
 }
 
 
@@ -2341,25 +2342,25 @@ int main() {
 ### 📤 Newton-Raphson Method Output
 ```
 ============================================
-           Newton Rapshon Method
+Newton Rapshon Method
 ============================================
 
 
 Polynomial function:
 x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
 ============================================
-                    Result
+Result
 ============================================
 
 Roots found in the given range:
-	x1 = 1.000000
-	x2 = 2.000000
-	x3 = 3.000000
-	x4 = 4.000000
-	x5 = 5.000000
-	x6 = 6.000001
+x1 = 1.000000
+x2 = 2.000000
+x3 = 3.000000
+x4 = 4.000000
+x5 = 5.000000
+x6 = 6.000001
 ============================================
-            The task is completed
+The task is completed
 ============================================
 
 ```
@@ -2425,6 +2426,12 @@ Roots found in the given range:
 
 ### 📖 Secant Method Theory
 
+The Secant Method is an iterative numerical technique designed to find the roots of a nonlinear equation `f(x) = 0`.It approximates the root by drawing a secant line through two points on the function's curve.Unlike the Newton-Raphson method, it does not require the evaluation of a derivative, making it computationally simpler.Each new approximation is found where the secant line intersects the x-axis, using the formula: <br>
+
+```xₙ₊₁ = xₙ − f(xₙ) · (xₙ − xₙ₋₁) / ( f(xₙ) − f(xₙ₋₁) )```
+
+It converges faster than the Bisection method but slightly slower than the Newton-Raphson method.The method is highly effective when the initial guesses are chosen close to the actual root.<br>
+
 <br>
 
 ### 🔢 Mathematical Representation
@@ -2433,17 +2440,19 @@ Roots found in the given range:
 
 ### 🤖 Algorithm
 
-**Step 1**: Define the polynomial function f(x) using the given coefficients and specify the tolerance E (stopping criterion) and the maximum number of iterations.<br>
+**Step 1**: Define the polynomial function `f(x)` using the given coefficients and specify the tolerance E (stopping criterion) and the maximum number of iterations.<br>
 
-**Step 2**: Identify two initial points, $x_0$ and $x_1$. In your code, these are determined by scanning the range [L, R] with step h until a sign change is found f($x_1$) * f($x_2$) < 0.<br>
+**Step 2**: Identify two initial points, `x₀` and `x₁`. In your code, these are determined by scanning the range `[L, R]`with step h until a sign change is found `f(x₁) * f(x₂) < 0`.<br>
 
 **Step 3**: Calculate the next approximation $x_2$ using the secant formula:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$x_2$ = $x_1$ - f($x_1$) * ($x_1$ - $x_0$)(f($x_1$) - f($x_0$)).<br>
+```x₂ = x₁ − f(x₁) · (x₁ − x₀) / ( f(x₁) − f(x₀) )```
 
-**Step 4**: Check if the absolute difference between the last two approximations is less than the tolerance: abs($x_2$ - $x_1$) < E      If true, the root is $x_2$. And Stop the iteration.
+<br>
+
+**Step 4**: Check if the absolute difference between the last two approximations is less than the tolerance: `abs(x₂ -x₁) < E ` If true, the root is $x_2$. And Stop the iteration.
 
 **Step 5**: If the stopping criterion is not met:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set $x_0$ = $x_1$.Set $x_1$ = $x_2$.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set `x₀ = x₁`.Set `x₁ = x₂`.<br>
 Repeat from Step 3 until the root is found or the maximum iterations are reached.
 
 <br>
@@ -2455,121 +2464,121 @@ Repeat from Step 3 until the root is found or the maximum iterations are reached
 using namespace std;
 
 void prnt() {
-    cout << "============================================\n";
-    cout << "              Secant Method\n";
-    cout << "============================================\n\n";
+cout << "============================================\n";
+cout << " Secant Method\n";
+cout << "============================================\n\n";
 }
 
 void RR(){
-    cout << "============================================\n";
-    cout<<"                    Result\n";
-    cout << "============================================\n";
+cout << "============================================\n";
+cout<<" Result\n";
+cout << "============================================\n";
 }
 
 void p(){
-    cout << "============================================\n";
-    cout<<"            The task is completed\n";
-    cout << "============================================\n";
+cout << "============================================\n";
+cout<<" The task is completed\n";
+cout << "============================================\n";
 }
 
 double f(double x, vector<double>& coef){
-    double res = 0.0;
-    int n = coef.size();
-    for(int i = 0; i < n; i++){
-        res += coef[i] * pow(x, n - 1 - i);
-    }
-    return res;
+double res = 0.0;
+int n = coef.size();
+for(int i = 0; i < n; i++){
+res += coef[i] * pow(x, n - 1 - i);
+}
+return res;
 }
 
 void printPolynomial(vector<double> &coef){
-    cout << "\nPolynomial function:\n";
-    int n = coef.size() - 1;
+cout << "\nPolynomial function:\n";
+int n = coef.size() - 1;
 
-    for (int i = 0; i <= n; i++) {
-        int power = n - i;
-        if (coef[i] == 0) continue;
+for (int i = 0; i <= n; i++) {
+int power = n - i;
+if (coef[i] == 0) continue;
 
-        if (i != 0 && coef[i] > 0) cout << " + ";
-        else if (i != 0 && coef[i] < 0) cout << " - ";
+if (i != 0 && coef[i] > 0) cout << " + ";
+else if (i != 0 && coef[i] < 0) cout << " - ";
 
-        if (power == 0)
-            cout << fabs(coef[i]);
-        else if (power == 1)
-            cout << fabs(coef[i]) << "x";
-        else if (fabs(coef[i]) > 1)
-            cout << fabs(coef[i]) << "x^" << power;
-        else
-            cout << "x^" << power;
-    }
-    cout << " = 0\n";
+if (power == 0)
+cout << fabs(coef[i]);
+else if (power == 1)
+cout << fabs(coef[i]) << "x";
+else if (fabs(coef[i]) > 1)
+cout << fabs(coef[i]) << "x^" << power;
+else
+cout << "x^" << power;
+}
+cout << " = 0\n";
 }
 
 double secant(vector<double> coef, double x0, double x1, double e, int maxIter) {
-    double x2;
-    for (int iter = 1; iter <= maxIter; iter++) {
-        double f0 = f(x0, coef);
-        double f1 = f(x1, coef);
+double x2;
+for (int iter = 1; iter <= maxIter; iter++) {
+double f0 = f(x0, coef);
+double f1 = f(x1, coef);
 
-        if (fabs(f1 - f0) < 1e-12) {
-            cout << "Denominator too small. Method fails.\n";
-            return x1;
-        }
+if (fabs(f1 - f0) < 1e-12) {
+cout << "Denominator too small. Method fails.\n";
+return x1;
+}
 
-        x2 = x1 - f1 * (x1 - x0) / (f1 - f0);
+x2 = x1 - f1 * (x1 - x0) / (f1 - f0);
 
-        if (fabs(x2 - x1) < e)
-            return x2;
+if (fabs(x2 - x1) < e)
+return x2;
 
-        x0 = x1;
-        x1 = x2;
-    }
-    return x1;
+x0 = x1;
+x1 = x2;
+}
+return x1;
 }
 
 int main() {
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+freopen("input.txt", "r", stdin);
+freopen("output.txt", "w", stdout);
 
-    prnt();
+prnt();
 
-    int n;
-    cin >> n;
+int n;
+cin >> n;
 
-    vector<double> coef(n + 1);
-    for (int i = 0; i <= n; i++) {
-        cin >> coef[i];
-    }
+vector<double> coef(n + 1);
+for (int i = 0; i <= n; i++) {
+cin >> coef[i];
+}
 
-    double L, R, h;
-    cin >> L >> R;
-    cin >> h;
+double L, R, h;
+cin >> L >> R;
+cin >> h;
 
-    double e = 1e-6;
-    int maxIter = 100;
+double e = 1e-6;
+int maxIter = 100;
 
-    vector<double> roots;
+vector<double> roots;
 
-    double x1 = L, x2 = L + h;
-    while (x2 <= R) {
-        if (f(x1, coef) * f(x2, coef) < 0) {
-            roots.push_back(secant(coef, x1, x2, e, maxIter));
-        }
-        x1 = x2;
-        x2 += h;
-    }
+double x1 = L, x2 = L + h;
+while (x2 <= R) {
+if (f(x1, coef) * f(x2, coef) < 0) {
+roots.push_back(secant(coef, x1, x2, e, maxIter));
+}
+x1 = x2;
+x2 += h;
+}
 
-    printPolynomial(coef);
+printPolynomial(coef);
 
-    RR();
-    cout << "\nRoots found in the given range:\n";
-    int i = 0;
-    for (double root : roots) {
-        cout << "\tx" << ++i << " = " 
-             << fixed << setprecision(6) << root << endl;
-    }
-    p();
+RR();
+cout << "\nRoots found in the given range:\n";
+int i = 0;
+for (double root : roots) {
+cout << "\tx" << ++i << " = "
+<< fixed << setprecision(6) << root << endl;
+}
+p();
 
-    return 0;
+return 0;
 }
 
 ```
@@ -2588,25 +2597,25 @@ int main() {
 ### 📤 Secant Method Output
 ```
 ============================================
-              Secant Method
+Secant Method
 ============================================
 
 
 Polynomial function:
 x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
 ============================================
-                    Result
+Result
 ============================================
 
 Roots found in the given range:
-	x1 = 1.000000
-	x2 = 2.000000
-	x3 = 3.000000
-	x4 = 4.000000
-	x5 = 5.000000
-	x6 = 6.000000
+x1 = 1.000000
+x2 = 2.000000
+x3 = 3.000000
+x4 = 4.000000
+x5 = 5.000000
+x6 = 6.000000
 ============================================
-            The task is completed
+The task is completed
 ============================================
 
 ```
@@ -2614,17 +2623,49 @@ Roots found in the given range:
 
 ### 🎯 Accuracy Consideration
 
+1. The accuracy of the Secant Method depends strongly on the choice of the initial approximations `x₁` and `x₀`.<br>
+
+2. It converges faster than the bisection method but slower than the Newton–Raphson method.<br>
+
+3. If the initial guesses are far from the actual root, convergence may be slow or may fail.<br>
+
+4. Accuracy can be affected when `f(x₁) - f(x₀)`is very small, leading to numerical instability.<br>
+
 <br>
 
 ### ➕ Advantages
+
+1. This method does not require calculation of derivatives.<br>
+
+2. Faster convergence than the bisection method.<br>
+
+3. Secant method is very simple and esay to implement.<br>
+
+4. This method is more efficient than fixed-point iteration.<br>
 
 <br>
 
 ### ➖ Disadvantages
 
+1. The method requires two initial guesses.<br>
+
+2. Secant method is slower than Newton–Raphson method.<br>
+
+3. Convergence is not guaranteed for poor initial guesses.<br>
+
+4. Can fail if `f(x₁) - f(x₀)` becomes very small.<br>
+
 <br>
 
 ### 🚀 Applications
+
+1. Finding roots of nonlinear algebraic equations.<br>
+
+2. Solving transcendental equations.<br>
+
+3. Can solve the numerical methods in computer science.<br>
+
+4. Can able to solve physics and applied mathematics problems.<br>
 
 <br>
 
@@ -3036,6 +3077,14 @@ Output
 
 ### 📖 Simpson 1/3 Rule Theory
 
+Simpson’s 1/3 Rule is a numerical method used to approximate the definite integral of a function. It divides the integration interval  `[a, b]` into an even number of subintervals and fits a second-degree (parabolic) polynomial through three consecutive points.The area under the curve is estimated using these parabolas rather than straight lines.This method is more accurate than the trapezoidal rule for smooth functions because it approximates the curve more closely.<br>
+
+**Formula:**
+```Integral ≈ (h/3) * [f(x₀) + f(xₙ) + 4f(x₁) + 2f(x₂) + 4f(x₃) + … + 4f(xₙ₋₁) ]```
+<br>
+Where `h = (b - a)/n`<br>
+n must be even.<br>
+
 <br>
 
 ### 🔢 Mathematical Representation
@@ -3044,21 +3093,21 @@ Output
 
 ### 🤖 Algorithm
 
-**Step 1**: Define the function f(x) to be integrated and input the lower limit (low), upper limit (up), and the step size (h).<br>
+**Step 1**: Define the function `f(x)` to be integrated and input the lower limit (low), upper limit (up), and the step size (h).<br>
 
-**Step 2**: Determine the number of intervals $n$ using the formula:  n = (up - low)/h.<br>
+**Step 2**: Determine the number of intervals $n$ using the formula:  `n = (up - low)/h`.<br>
 
 **Step 3**: Check if n is an even number. If n is odd, the Simpson's 1/3 Rule cannot be applied (return an error or adjust h).<br>
 
 **Step 4**: Calculate the initial sum by adding the function values at the boundaries:  sum = f(low) + f(up).<br>
 
 **Step 5**: Loop through each interval from i = 1 to n-1 : <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update the current x value: x = low + (i * h)$.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update the current x value: `x = low + (i * h)`.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If i is odd: Multiply f(x) by 4 and add to the sum.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If i is even: Multiply f(x) by 2 and add to the sum.<br>
 
 **Step 6**: Multiply the total sum by h/3 to get the final result:<br>  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Result = sum * h/3 .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Result = sum * h/3` .<br>
 <br>
 
 ### 💻 Simpson 1/3 Rule Code
@@ -3166,17 +3215,42 @@ q
 
 ### 🎯 Accuracy Consideration
 
+1. Simpson’s 1/3 Rule is more accurate than the trapezoidal rule because it approximates the function with parabolic curves instead of straight lines.<br>
+
+2. Using a smaller step size `h` (more subintervals) increases accuracy.<br>
+
+3. Accuracy improves when the function is smooth and continuous over the interval.<br>
+
+4. The error depends on the fourth derivative of the function; smaller higher-order derivatives lead to higher accuracy.<br>
+
 <br>
 
 ### ➕ Advantages
+
+1. Simpson's 1/3 rule provides good accuracy for smooth functions with fewer subintervals compared to the trapezoidal rule.<br>
+
+2. This method is simple and easy to implement.<br>
+
+3. Suitable for a wide range of functions that are continuous and differentiable.<br>
 
 <br>
 
 ### ➖ Disadvantages
 
+1. This method requires an even number of subintervals.<br>
+
+2. Less accurate for functions with discontinuities or rapid changes.<br>
+
+3. Not suitable for functions that are highly oscillatory.<br>
 <br>
 
 ### 🚀 Applications
+
+1. Calculating areas under curves.<br>
+
+2. Determining volumes, work done, and other physical quantities where analytical integration is difficult.<br>
+
+3. Used in computer simulations and numerical analysis to approximate definite integrals.<br>
 
 <br>
 
@@ -3188,6 +3262,14 @@ q
 
 ### 📖 Simpson 3/8 Rule Theory
 
+Simpson’s 3/8 Rule is a numerical method used to approximate the definite integral of a function.The method divides the integration interval `[a, b]` into subintervals where the total number `n` is a multiple of 3.It fits a third-degree (cubic) polynomial through four consecutive points to estimate the area under the curve.This method is more accurate than the trapezoidal rule and is specifically designed for cases where the number of intervals is a multiple of 3.<br>
+
+**Formula:**
+```Integral ≈ (3h/8) * [f(x₀) + f(xₙ) + 3f(x₁) + 3f(x₂) + 2f(x₃) + 3f(x₄) + 3f(x₅) + 2f(x₆) + ...]```<br>
+
+Where `h = (b - a)/n`<br>
+`n` must be a multiple of 3<br>
+
 <br>
 
 ### 🔢 Mathematical Representation
@@ -3198,19 +3280,19 @@ q
 
 **Step 1**: Define the function f(x) to be integrated and input the lower limit (low), upper limit (up), and the step size (h).<br>
 
-**Step 2**: Determine the number of intervals $n$ using the formula:  n = (up - low)/h.<br>
+**Step 2**: Determine the number of intervals $n$ using the formula:  `n = (up - low)/h`.<br>
 
-**Step 3**: Check if n is a multiple of 3. If n (mod 3) ≠ 0, the Simpson's 3/8 Rule cannot be applied (return an error or adjust h).<br>
+**Step 3**: Check if n is a multiple of 3. If `n (mod 3) ≠ 0`, the Simpson's 3/8 Rule cannot be applied (return an error or adjust h).<br>
 
 **Step 4**: Calculate the initial sum by adding the function values at the boundaries:  sum = f(low) + f(up).<br>
 
 **Step 5**: Loop through each interval from i = 1 to n-1 : <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update the current x value: x = low + (i * h)$.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update the current x value: `x = low + (i * h)`.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If i is multiple of 3: Multiply f(x) by 2 and add to the sum.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Otherwise: Multiply f(x) by 3 and add to the sum.<br>
 
 **Step 6**: Multiply the total sum by 3h/8 to get the final result:<br>  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Result = sum * 3*h/8 .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`Result = sum * 3*h/8` .<br>
 
 
 <br>
@@ -3323,21 +3405,50 @@ q
 
 ### 🎯 Accuracy Consideration
 
+1. The Simpson’s 3/8 Rule is more accurate than the trapezoidal rule because it approximates the curve using cubic polynomials.<br>
+
+2. Accuracy improves when the function is smooth and continuous over the interval.<br>
+
+3. Using a smaller step size `h` (more subintervals) increases the accuracy.<br>
+
+4. The number of subintervals `n` must be a multiple of `3` to apply the rule properly.<br>
+
+5. If the function has rapid changes or discontinuities, accuracy may decrease.<br>
+
 <br>
 
 ### ➕ Advantages
+
+1. Simpson's `3/8` rule is more accurate than the trapezoidal rule.<br>
+
+2. This method is suitable for smooth and continuous functions.<br>
+
+3. This method can handle integrals over intervals where the number of subintervals is a multiple of `3`.<br>
 
 <br>
 
 ### ➖ Disadvantages
 
+1. Simpson's `3/8` rule requires the number of subintervals `n` to be a multiple of `3`.<br>
+
+2. Less accurate for functions with discontinuities or sharp variations.<br>
+
+3. Slightly more complex calculations compared to Simpson’s `1/3` rule.<br>
+
 <br>
 
 ### 🚀 Applications
 
+1. Using simpson's 3/8 rule we can Calculate areas, volumes, and work done in applied problems.<br>
+
+2. This method can Solve problems in applied mathematics where analytical integration is difficult.<br>
+
+3. Useful in computer simulations and numerical analysis for approximating integrals.<br>
+
 <br>
 
 ---
+
 
 
 
