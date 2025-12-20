@@ -2675,6 +2675,26 @@ The task is completed
 
 # Curve-Fitting
 
+Curve fitting, also known as regression analysis, is a fundamental numerical method used to find a mathematical function that best approximates the relationship between variables in a set of experimental or observational data points. The goal is to construct a continuous curve or function that passes through or near the given data points in a way that minimizes the overall error.
+
+The most common approach to curve fitting is the Least Square Method. This method finds the curve that minimizes the sum of the squares of the residuals (vertical distances between data points and the fitted curve).
+
+For data points `(x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ)` and a fitting function `f(x)`, the least squares method minimizes:
+
+```
+S = Σ[yᵢ - f(xᵢ)]²
+```
+
+where `S` is the sum of squared residuals.
+
+Curve fitting can be broadly classified based on the type of function being fitted:
+
+  1. Linear Regression (First-Order Polynomial): Fits a straight line: `y = ax + b`
+
+  2. Polynomial Regression (Higher-Order Polynomials)**: Fits polynomials: `y = a₀ + a₁x + a₂x² + ... + aₘxᵐ`
+
+  3. Transcendental (Non-Polynomial) Regression: Fits exponential, power, logarithmic, or other non-polynomial functions.
+
 <br>
 
 
@@ -2684,49 +2704,234 @@ The task is completed
 
 ### 📖 Least Square Regression (Linear Equation) Theory
 
+Least square regression is a statistical method used to find the best-fitting straight line through a set of data points. The method minimizes the sum of the squares of the vertical deviations from each data point to the line.
+
+For a linear equation of the form `y = ax + b`, the least square method finds the values of coefficients a and b that minimize the sum of squared errors: 
+```
+Σ(yᵢ - (axᵢ + b))²
+```
+
+The best-fit line is determined by calculating the slope (b) and y-intercept (a) using the normal equations derived from partial derivatives of the error function. This method is also known as linear regression.
 <br>
 
 ### 🔢 Mathematical Representation
 
+For `n` data points `(x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ)`, the linear equation is:
+```
+y = bx + a
+```
+
+The coefficients are calculated using:
+```
+b = (n∑(xᵢyᵢ) - ∑xᵢ∑yᵢ) / (n∑(xᵢ²) - (∑xᵢ)²)
+
+a = (∑yᵢ - b∑xᵢ) / n
+```
+
+Where:
+- `n` is the number of data points
+- `∑xᵢ` is the sum of all x values
+- `∑yᵢ` is the sum of all y values
+- `∑(xᵢyᵢ)` is the sum of products of x and y
+- `∑(xᵢ²)` is the sum of squares of x values
+
 <br>
 
 ### 🤖 Algorithm
+
+  1. Calculate Summations: 
+     - Compute ∑xᵢ (sum of x values)
+     - Compute ∑yᵢ (sum of y values)
+     - Compute ∑(xᵢyᵢ) (sum of products)
+     - Compute ∑(xᵢ²) (sum of x squares)
+
+  2. Compute Slope (b):
+   ```
+   b = (n∑(xᵢyᵢ) - ∑xᵢ∑yᵢ) / (n∑(xᵢ²) - (∑xᵢ)²)
+   ```
+
+  3. Compute Intercept (a):
+   ```
+   a = (∑yᵢ - b∑xᵢ) / n
+   ```
+
+  4. Form the fitted line Equation: `y = bx + a`.
+
+  5. For a given value of x, estimate y using the fitted equation.
 
 <br>
 
 ### 💻 Least Square Regression (Linear Equation) Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include <fstream>
+using namespace std;
+
+void solve(ifstream &fin, ofstream &fout)
+{
+    //-----Reading the number of data points----
+    int n;
+    fin >> n;
+
+    //----Reading the data points in x and y vectors
+    vector<double> x(n), y(n);
+    for (int i = 0; i < n; i++)
+    {
+        fin >> x[i] >> y[i];
+    }
+
+    double sumX = 0, sumY = 0, sumXY = 0, sumXsq = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        sumX += x[i];
+        sumY += y[i];
+        sumXY += (x[i] * y[i]);
+        sumXsq += (x[i] * x[i]);
+    }
+
+    double b = (n * sumXY - sumX * sumY) / (n * sumXsq - sumX * sumX);
+    double a = (sumY - b * sumX) / n;
+
+    fout << "Linear fitted equation: \n";
+    fout << "y = " << b << "x ";
+    if (a)
+        fout << "+ " << a; //-----to check if the equation went through the origin-----
+    fout << "\n";
+
+    int est;
+    fin >> est;
+
+    fout << "Estimate the value of y for x = " << est << " : ";
+    fout << (b * est + a) << "\n\n";
+}
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    fout << "Least Square Regression Method for Linear Equations\nMultiple Testcases\n\n";
+
+    if (!fin)
+    {
+        fout << "File not found.\n";
+        return 0;
+    }
+
+    //-----Multiple Testcases----
+    int t;
+    fin >> t;
+
+    int cse = 1;
+    while (t--)
+    {
+        for (int i = 0; i < 45; i++)
+            fout << "=";
+        fout << '\n';
+        fout << "Test case: " << cse << "\n";
+        solve(fin, fout);
+        cse++;
+    }
+}
 ```
 <br>
 
 ### 📝 Least Square Regression (Linear Equation) Input
 ```
-Input
+3
+7
+1 3
+2 4
+3 4
+4 5
+5 8
+6 9
+7 10
+8
+5
+0 10
+1 8
+2 6
+3 4
+4 2
+5
+6
+0 0
+1 2
+2 4
+3 6
+4 8 
+5 10
+6
 ```
 <br>
 
 ### 📤 Least Square Regression (Linear Equation) Output
 ```
-Output
+Least Square Regression Method for Linear Equations
+Multiple Testcases
+
+=============================================
+Test case: 1
+Linear fitted equation: 
+y = 1.25x + 1.14286
+Estimate the value of y for x = 8 : 11.1429
+
+=============================================
+Test case: 2
+Linear fitted equation: 
+y = -2x + 10
+Estimate the value of y for x = 5 : 0
+
+=============================================
+Test case: 3
+Linear fitted equation: 
+y = 2x 
+Estimate the value of y for x = 6 : 12
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+- The method assumes a linear relationship between variables
+
+- More data points generally lead to better approximation
+
+- Works best when data points show a linear trend
 <br>
 
 ### ➕ Advantages
 
+- Simple and easy to implement
+
+- Computationally efficient with O(n) complexity
+
+- Can be used for prediction and trend analysis
+  
 <br>
 
 ### ➖ Disadvantages
 
+- Only applicable to linear relationships
+
+- Assumes errors are normally distributed 
+
+- Does not work well for non-linear data patterns
+
+- May not be appropriate for curved relationships
+- 
 <br>
 
 ### 🚀 Applications
 
+- Predicting future values based on historical data
+
+- Analyzing trends in economics and business
+
+- Finding relationships between variables in scientific experiments
+  
 <br>
 
 ---
@@ -2737,49 +2942,294 @@ Output
 
 ### 📖 Least Square Regression (Transcendental Equation) Theory
 
+Transcendental equations involve transcendental functions such as exponential, logarithmic, trigonometric etc. These equations cannot be solved algebraically and require numerical methods.
+
+In curve fitting, transcendental regression is used when data follows exponential growth/decay, power laws, or other non-polynomial patterns. The method transforms the transcendental equation into a linear form using logarithms, then applies linear least squares regression.
+
+Common transcendental forms include:
+- *Power equation*: `y = ax^b` (transformed: `ln(y) = ln(a) + b * ln(x)`)
+- *Exponential equation*: `y = ae^(bx)` (transformed: `ln(y) = ln(a) + bx`)
+- *Offset exponential*: `y = a + be^(x/4)` (linear in a and b after transformation)
+  
 <br>
 
 ### 🔢 Mathematical Representation
 
+**1. Power Equation: `y = ax^b`**
+
+Taking logarithm: 
+```
+ln(y) = ln(a) + b * ln(x)
+```
+
+Let `Y = ln(y)`, `X = ln(x)`, `B = b`, `A = ln(a)`
+
+we get,
+```
+Y = A + BX (linear form)
+```
+
+After solving,
+```
+b = B, a = e^A
+```
+
+**2. Exponential Equation: `y = ae^(bx)`**
+
+Taking logarithm,
+```
+ln(y) = ln(a) + bx
+```
+Let `Y = ln(y)`, `B = b`, `A = ln(a)`
+
+we get,
+```
+Y = A + Bx (linear form)
+```
+After solving,
+```
+b = B, a = e^A
+```
+
+**3. Offset Exponential: `y = a + be^(x/4)`**
+
+Let `f(x) = e^(x/4)`
+
+we get,
+```
+ y = a + b·f(x) (linear in a and b)
+```
+Use linear regression with `y` and `f(x)`
+
 <br>
 
 ### 🤖 Algorithm
+
+ 1. Transform data according to the equation type 
+    - For Power Equation `(y = ax^b)`, transform data: `X = ln(x)`, `Y = ln(y)`
+    - For Exponential Equation `(y = ae^(bx))`, transform data: `Y = ln(y)`, keep `x` unchanged
+    - For Offset Exponential `(y = a + be^(x/4))`, calculate `f(x) = e^(x/4)` for each data point
+
+ 2. Compute necessary sums for linear regression
+
+ 3. Calculate coefficients using normal equations. Transform coefficients back to original form if needed
+
+ 4. Form the fitted equation. Use equation for estimation
 
 <br>
 
 ### 💻 Least Square Regression (Transcendental Equation) Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include <fstream>
+using namespace std;
+
+//-----For the power equations of the form: y=ax^b -------
+void power(vector<double> lnx, vector<double> lny, double est, ofstream &fout)
+{
+    int n = lnx.size();
+    double sumLNx = 0, sumLNy = 0, sumLNxy = 0, sumSqlnx = 0;
+    for (int i = 0; i < n; i++)
+    {
+        sumLNx += lnx[i];
+        sumLNy += lny[i];
+        sumLNxy += (lnx[i] * lny[i]);
+        sumSqlnx += (lnx[i] * lnx[i]);
+    }
+
+    double b = (n * sumLNxy - sumLNx * sumLNy) / (n * sumSqlnx - sumLNx * sumLNx);
+    double a = (sumLNy - b * sumLNx) / n;
+    a = exp(a);
+
+    fout << "Power Equation: \n";
+    fout << "y = " << a << " * x^(" << b << ")\n";
+
+    fout << "Estimate the value of y for x = " << est << " : ";
+    fout << a * (pow(est, b)) << "\n\n";
+}
+
+//-----For the exponential equations of the form: y=ae^(bx) -------
+void exponential(vector<double> x, vector<double> lny, double est, ofstream &fout)
+{
+    int n = x.size();
+    double sumX = 0, sumLNy = 0, sumXsq = 0, sumXlny = 0;
+    for (int i = 0; i < n; i++)
+    {
+        sumX += x[i];
+        sumLNy += lny[i];
+        sumXlny += (x[i] * lny[i]);
+        sumXsq += (x[i] * x[i]);
+    }
+
+    double b = (n * sumXlny - sumX * sumLNy) / (n * sumXsq - sumX * sumX);
+    double a = (sumLNy - b * sumX) / n;
+    a = exp(a);
+
+    fout << "Exponential Equation: \n";
+    fout << "y = " << a << " * e^(" << b << "x)\n";
+
+    fout << "Estimate the value of y for x = " << est << " : ";
+    fout << a * (exp(b * est)) << "\n\n";
+}
+
+//-----For the offset exponential equations of the form: y=a+be^(x/4) -------
+void ofset(vector<double> y, vector<double> fx, double est, ofstream &fout)
+{
+    int n = y.size();
+    double sumY = 0, sumfx = 0, sumfxy = 0, sumSqfx = 0;
+    for (int i = 0; i < n; i++)
+    {
+        sumY += y[i];
+        sumfx += fx[i];
+        sumfxy += (fx[i] * y[i]);
+        sumSqfx += (fx[i] * fx[i]);
+    }
+
+    double b = (n * sumfxy - sumfx * sumY) / (n * sumSqfx - sumfx * sumfx);
+    double a = (sumY - b * sumfx) / n;
+
+    fout << "Offset Exponential Equation: \n";
+    fout << "y = " << a << " + " << b << " * e^(x/4)\n";
+
+    fout << "Estimate the value of y for x = " << est << " : ";
+    fout << a + b * (exp(est / 4)) << "\n\n";
+}
+
+void solve(ifstream &fin, ofstream &fout)
+{
+    //-----Reading the number of data points------
+    int n;
+    fin >> n;
+
+    //-----Reading the data points in two vectors-----
+    vector<double> x(n), y(n);
+    for (int i = 0; i < n; i++)
+    {
+        fin >> x[i] >> y[i];
+    }
+
+    vector<double> lnx(n), lny(n), fx(n);
+    for (int i = 0; i < n; i++)
+    {
+        lnx[i] = log(x[i]);
+        lny[i] = log(y[i]);
+        fx[i] = exp(x[i] / 4);
+    }
+
+    double est;
+    fin >> est;
+
+    fout << "Transcendental fitted equations: \n";
+    power(lnx, lny, est, fout);
+
+    exponential(x, lny, est, fout);
+
+    ofset(y, fx, est, fout);
+}
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    fout << "Least Square Regression Method for Transcendental Equations\nMultiple Testcases\n\n";
+
+    if (!fin)
+    {
+        fout << "File not found.\n";
+        return 0;
+    }
+
+    //-----Multiple Testcases----
+    int t;
+    fin >> t;
+
+    int cse = 1;
+    while (t--)
+    {
+        for (int i = 0; i < 45; i++)
+            fout << "=";
+        fout << '\n';
+        fout << "Test case: " << cse << "\n";
+        solve(fin, fout);
+        cse++;
+    }
+}
 ```
 <br>
 
 ### 📝 Least Square Regression (Transcendental Equation) Input
 ```
-Input
+1
+5
+1 50
+2 80
+3 96
+4 120
+5 145
+6
 ```
 <br>
 
 ### 📤 Least Square Regression (Transcendental Equation) Output
 ```
-Output
+Least Square Regression Method for Transcendental Equations
+Multiple Testcases
+
+=============================================
+Test case: 1
+Transcendental fitted equations: 
+Power Equation: 
+y = 49.884 * x^(0.642116)
+Estimate the value of y for x = 6 : 157.625
+
+Exponential Equation: 
+y = 43.1231 * e^(0.253489x)
+Estimate the value of y for x = 6 : 197.352
+
+Offset Exponential Equation: 
+y = 5.74924 + 41.0587 * e^(x/4)
+Estimate the value of y for x = 6 : 189.761
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+- Logarithmic transformation requires all data points to be positive (y > 0 for ln(y))
+
+- Errors are minimized in the transformed space, not in the original space
+
+- Different equation forms may fit the same data with varying accuracy
+
 <br>
 
 ### ➕ Advantages
 
+- Can model exponential growth and decay patterns effectively
+
+- Linearization technique simplifies the fitting process
+
+- Applicable to a wide variety of non-linear relationships
+
+- Computationally efficient due to linear regression after transformation
+  
 <br>
 
 ### ➖ Disadvantages
+
+- Requires positive data values for logarithmic transformation
+
+- Limited to specific functional forms (exponential, power, etc.)
 
 <br>
 
 ### 🚀 Applications
 
+- Population growth and decline modeling 
+
+- Learning curves
+  
 <br>
 
 ---
@@ -2790,50 +3240,310 @@ Output
 
 ### 📖 Least Square Regression (Polynomial Equation) Theory
 
+Polynomial regression is an extension of linear regression where the relationship between the independent variable `x` and dependent variable `y` is modeled as an n-th degree polynomial. This method is used when the data shows a curved pattern that cannot be adequately represented by a straight line.
+
+The least squares method is used to find the coefficients of the polynomial that minimize the sum of squared residuals. For a polynomial of degree `m`: 
+```
+y = a₀ + a₁x + a₂x² + ... + aₘxᵐ
+```
+the method determines the coefficients a₀, a₁, ..., aₘ.
+
 <br>
 
 ### 🔢 Mathematical Representation
 
+For n data points `(x₁, y₁), (x₂, y₂), ..., (xₙ, yₙ)`, fit a polynomial of degree `m`:
+```
+y = a₀ + a₁x + a₂x² + ... + aₘxᵐ
+```
+
+The normal equations form a system of (m+1) linear equations:
+```
+[∑1      ∑x      ∑x²    ... ∑xᵐ    ] [a₀]   [∑y    ]
+[∑x      ∑x²     ∑x³    ... ∑xᵐ⁺¹  ] [a₁]   [∑xy   ]
+[∑x²     ∑x³     ∑x⁴    ... ∑xᵐ⁺²  ] [a₂] = [∑x²y  ]
+[...     ...     ...    ... ...    ] [...] = [...   ]
+[∑xᵐ     ∑xᵐ⁺¹   ∑xᵐ⁺²  ... ∑x²ᵐ  ] [aₘ]   [∑xᵐy  ]
+```
+
+where all sums are from i=1 to n.
+
 <br>
 
 ### 🤖 Algorithm
+
+ 1. Read n data points (xᵢ, yᵢ) and the degree m of the polynomial.
+
+ 2. Compute sums for powers of x from 0 to 2m:
+     - ∑x⁰ = n
+     - ∑x¹, ∑x², ..., ∑x²ᵐ⁻²
+
+ 3. Compute sums of y multiplied by powers of x:
+     - ∑y, ∑xy, ∑x²y, ..., ∑xᵐy
+
+ 4. Create the (m+1) × (m+2) augmented matrix using the calculated sums.
+
+ 5. Use Gauss elimination to solve the system of normal equations to find coefficients a₀, a₁, ..., aₘ.
+
+ 6. Form the polynomial equation using the calculated coefficients.
+
+ 7. Use the polynomial to estimate y values for given x values.
 
 <br>
 
 ### 💻 Least Square Regression (Polynomial Equation) Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include <fstream>
+using namespace std;
+
+void gauss(vector<double> &ans, vector<vector<double>> cof)
+{
+    //----farward elimination phase-----
+    int n = cof.size();
+    for (int i = 0; i < n - 1; i++)
+    {
+        int pivot = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (fabs(cof[j][i]) > fabs(cof[pivot][i]))
+                pivot = j;
+        }
+
+        if (pivot != i)
+            swap(cof[i], cof[pivot]);
+
+        if (fabs(cof[i][i]) < 1e-9)
+            continue;
+
+        double x = cof[i][i];
+
+        for (int k = i + 1; k < n; k++)
+        {
+            double y = cof[k][i];
+            for (int j = i; j < n + 1; j++)
+            {
+                cof[k][j] = cof[k][j] - cof[i][j] * y / x;
+            }
+        }
+    }
+
+    //------back substitution phase------
+    for (int i = n - 1; i >= 0; i--)
+    {
+        double sum = 0;
+        for (int j = i + 1; j < n; j++)
+        {
+            sum += ans[j] * cof[i][j];
+        }
+        ans[i] = (cof[i][n] - sum) / cof[i][i];
+    }
+}
+
+void solve(ifstream &fin, ofstream &fout)
+{
+    int n;
+    fin >> n;
+
+    vector<double> x(n), y(n);
+    for (int i = 0; i < n; i++)
+    {
+        fin >> x[i] >> y[i];
+    }
+
+    int m;
+    fin >> m;
+
+    fout << "Finding Polynomial Equation of order " << m << '\n';
+
+    m++;
+    int tot = 2 * m - 2;
+
+    long double sumY = 0;
+    for (int i = 0; i < n; i++)
+    {
+        sumY += y[i];
+    }
+
+    vector<long double> sq, xy;
+    sq.push_back(n);
+    xy.push_back(sumY);
+
+    int p = 1;
+    for (int i = 0; i < tot; i++)
+    {
+        long double sumX = 0, sumXY = 0;
+        for (int i = 0; i < n; i++)
+        {
+            long double q = pow(x[i], p);
+            sumX += q;
+            sumXY += (q * y[i]);
+        }
+        p++;
+        sq.push_back(sumX);
+        xy.push_back(sumXY);
+    }
+
+    //-----augmented matrix------
+    vector<vector<double>> cof(m, vector<double>(m + 1, 0));
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0, k = i; j < m; j++, k++)
+        {
+            cof[i][j] = sq[k];
+        }
+        cof[i][m] = xy[i];
+    }
+
+    vector<double> ans(m, 0);
+    gauss(ans, cof);
+
+    fout << "Polynomial fitted equation: \n";
+
+    fout << "y = ";
+    bool first = true;
+
+    for (int i = 0; i < m; i++)
+    {
+        if (fabs(ans[i]) < 1e-9)
+            continue;
+        if (!first)
+        {
+            if (ans[i] > 0)
+                fout << " + ";
+            else
+                fout << " - ";
+        }
+        else if (ans[i] < 0)
+            fout << "-";
+
+        double coef = fabs(ans[i]);
+        if (!(coef == 1 && i > 0))
+            fout << coef;
+
+        if (i > 0)
+        {
+            fout << "x";
+            if (i > 1)
+                fout << "^" << i;
+        }
+
+        first = false;
+    }
+
+    fout << "\n\n";
+}
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    fout << "Least Square Regression Method for Polynomial Equations\nMultiple Testcases\n\n";
+
+    if (!fin)
+    {
+        fout << "File not found.\n";
+        return 0;
+    }
+
+    //-----Multiple Testcases----
+    int t;
+    fin >> t;
+
+    int cse = 1;
+    while (t--)
+    {
+        for (int i = 0; i < 45; i++)
+            fout << "=";
+        fout << '\n';
+        fout << "Test case: " << cse << "\n";
+        solve(fin, fout);
+        cse++;
+    }
+}
 ```
 <br>
 
 ### 📝 Least Square Regression (Polynomial Equation) Input
 ```
-Input
+2
+5
+1 6
+2 11
+3 18
+4 27
+5 38
+2
+5
+0 5
+1 5
+2 7
+3 17
+4 41
+3
 ```
 <br>
 
 ### 📤 Least Square Regression (Polynomial Equation) Output
 ```
-Output
+Least Square Regression Method for Polynomial Equations
+Multiple Testcases
+
+=============================================
+Test case: 1
+Finding Polynomial Equation of order 2
+Polynomial fitted equation: 
+y = 3 + 2x + 1x^2
+
+=============================================
+Test case: 2
+Finding Polynomial Equation of order 3
+Polynomial fitted equation: 
+y = 5 + 1x - 2x^2 + 1x^3
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+- Numerical instability may occur with very high degree polynomials
+
+- The condition number of the normal equations matrix increases with polynomial degree
+  
 <br>
 
 ### ➕ Advantages
 
+- Can model non-linear relationships effectively
+
+- Provides better fit than linear regression for curved data
+
+- Can approximate many different curve shapes
+  
 <br>
 
 ### ➖ Disadvantages
 
+- Risk of overfitting with high degree polynomials
+
+- Computationally more expensive than linear regression
+
+- Difficult to determine the optimal polynomial degree
+
+- Numerical instability with high degrees
+  
 <br>
 
 ### 🚀 Applications
 
+- Modeling growth curves, fitting experimental data in physics and engineering
+ 
+- Modeling non-linear relationships in data science
+  
 <br>
+
 
 ---
 
