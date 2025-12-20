@@ -539,8 +539,20 @@ using namespace std;
 
 void prnt() {
     cout << "============================================\n";
-    cout << "              Bisection Method\n";
+    cout << "            Bisection Method\n";
     cout << "============================================\n\n";
+}
+
+void RR(){
+    cout << "============================================\n";
+    cout<<"                    Result\n";
+    cout << "============================================\n";
+}
+
+void p(){
+    cout << "============================================\n";
+    cout<<"            The task is completed\n";
+    cout << "============================================\n";
 }
 
 double f(double x, vector<double>& coef){
@@ -640,14 +652,14 @@ int main(){
 
     printPolynomial(coef);
 
-
+ RR();
     cout << "\nRoots found in the given range:\n";int i = 0;
 
     for (double root : roots) {
         i++;
         cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
     }
-
+p();
     return 0;
 }
 
@@ -667,12 +679,15 @@ int main(){
 ### 📤 Bisection Method Output
 ```
 ============================================
-              Bisection Method
+            Bisection Method
 ============================================
 
 
 Polynomial function:
 x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
+============================================
+                    Result
+============================================
 
 Roots found in the given range:
 	x1 = 1.000006
@@ -681,6 +696,9 @@ Roots found in the given range:
 	x4 = 4.000049
 	x5 = 4.999976
 	x6 = 6.000006
+============================================
+            The task is completed
+============================================
 
 ```
 <br>
@@ -787,6 +805,18 @@ void prnt() {
     cout << "============================================\n\n";
 }
 
+void RR(){
+    cout << "============================================\n";
+    cout<<"                    Result\n";
+    cout << "============================================\n";
+}
+
+void p(){
+    cout << "============================================\n";
+    cout<<"            The task is completed\n";
+    cout << "============================================\n";
+}
+
 double f(double x, vector<double>& coef){
     double res = 0.0;
     int n = coef.size();
@@ -886,14 +916,17 @@ int main(){
     printPolynomial(coef);
 
 
+    RR();
     cout << "\nRoots found in the given range:\n";int i = 0;
     for (double root : roots) {
         i++;
         cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
     }
+    p();
 
     return 0;
 }
+
 
 
 ```
@@ -918,6 +951,9 @@ int main(){
 
 Polynomial function:
 x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
+============================================
+                    Result
+============================================
 
 Roots found in the given range:
 	x1 = 1.000000
@@ -926,7 +962,9 @@ Roots found in the given range:
 	x4 = 4.000000
 	x5 = 5.000000
 	x6 = 6.000000
-
+============================================
+            The task is completed
+============================================
 ```
 <br>
 
@@ -990,6 +1028,16 @@ Roots found in the given range:
 
 ### 📖 Newton-Raphson Method Theory
 
+The Newton-Raphson Method is a high-speed numerical technique used to find the root of a nonlinear equation f(x) = 0.<br>
+
+The process begins with an initial guess, $x_0$.A tangent is drawn to the curve at that point to see where it crosses the x-axis.That crossing point becomes the next guess, repeating until the values move closer to the actual root.<br>
+
+The formula :<br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x<sub>n+1</sub>​ = x<sub>n</sub> ​− f<sup>′</sup>(x<sub>n</sub>​)/f(x<sub>n</sub>​)<br>
+
+The formula uses both the function value and its derivative so each step is guided by the slope of the curve.If the initial guess is close and the derivative is not zero, the accuracy nearly doubles with every step.<br>​
+ 
 <br>
 
 ### 🔢 Mathematical Representation
@@ -998,40 +1046,240 @@ Roots found in the given range:
 
 ### 🤖 Algorithm
 
+**Step 1**: Find f<sup>'</sup>($x_n$).<br>
+
+**Step 2**: Choose 2 real numbers a and b such that f(a) * f(b) < 0 and stopping criterion E. If such $a$ and $b$ do not exist, then randomly guess a.<br>
+
+**Step 3**: Assume $x_0$ = a.<br>
+
+**Step 4**: Find x<sub>n+1</sub>.<br>
+
+**Step 5**:  If |x<sub>n+1</sub> - $x_n$| < E, then the root is x<sub>n+1</sub> and stop. Otherwise, set $x_n$ = x<sub>n+1</sub> and repeat the iteration.<br>
+
 <br>
 
 ### 💻 Newton-Raphson Method Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+using namespace std;
+
+void prnt() {
+    cout << "============================================\n";
+    cout << "           Newton Rapshon Method\n";
+    cout << "============================================\n\n";
+}
+
+void RR(){
+    cout << "============================================\n";
+    cout<<"                    Result\n";
+    cout << "============================================\n";
+}
+
+void p(){
+    cout << "============================================\n";
+    cout<<"            The task is completed\n";
+    cout << "============================================\n";
+}
+
+double f(double x, vector<double>& coef){
+    double res = 0.0;
+    int n = coef.size();
+    for(int i=0;i<n;i++){
+        res += coef[i]*pow(x,n-1-i);
+    }
+    return res;
+
+}
+
+void printPolynomial(vector<double> &coef){
+      cout << "\nPolynomial function:\n";
+
+      int n = coef.size() - 1;
+
+    for (int i = 0; i <= n; i++) {
+        int power = n - i;
+
+        if (coef[i] == 0) continue;
+        if (i != 0 && coef[i] > 0)
+            cout << " + ";
+        else if(i !=0 && coef[i]<0)
+            cout<<" - ";    
+        if (power == 0)
+            cout << fabs(coef[i]);
+        else if (power == 1)
+            cout << fabs(coef[i]) << "x";
+        else if(fabs(coef[i]) >1)
+            cout << fabs(coef[i]) << "x^" << power;
+        else 
+            cout << "x^" << power;
+
+    }
+
+    cout << " = 0\n";
+    return;
+}
+
+double differentiate(vector<double>coef, double x) {
+    double h = 1e-6;   
+    return (f(x + h,coef) - f(x - h,coef)) / (2 * h);
+}
+
+double newton_raphson(vector<double>coef, double initial_guess, double e) {
+    double x0 = initial_guess;
+    double x1;
+    while (true) {
+        double f0 = f(x0, coef);
+        double df0 = differentiate(coef, x0);
+        x1 = x0 - f0 / df0;
+        if (fabs(f(x1, coef)) < e) {
+            break;
+        }
+        x0 = x1;
+    }
+    return x1;
+}
+
+int main() {
+    double x,pos,neg,e = 0.001,mid;
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    prnt();
+    int n;
+    cin>>n;
+
+    vector<double>coef(n+1);
+
+
+    for (int i = 0; i <= n; i++) {
+        cin >> coef[i];
+    }
+    double L, R, h;
+
+    cin >> L >> R;
+
+    cin >> h;
+
+    double x1 = L, x2 = L + h;
+
+    vector<double> roots;
+    while (x2 <= R) {
+        if (f(x1, coef) * f(x2, coef) < 0) {
+            pos = x2;
+            neg = x1;
+            roots.push_back(newton_raphson(coef,x2,e));
+        x1 = x2;
+        x2 += h;
+        continue;
+
+        }
+        x1 = x2;
+        x2 += h;
+    }
+
+    printPolynomial(coef);
+
+
+    RR();
+    cout << "\nRoots found in the given range:\n";int i = 0;
+    for (double root : roots) {
+        i++;
+        cout <<"\tx"<<i<<" = "<< fixed << setprecision(6) << root << endl;
+    }
+    p();
+    return 0;
+}
+
+
 ```
 <br>
 
 ### 📝 Newton-Raphson Method Input
 ```
-Input
+6
+1 -21 175 -735 1624 -1764 720
+-5 10
+0.1
+
 ```
 <br>
 
 ### 📤 Newton-Raphson Method Output
 ```
-Output
+============================================
+           Newton Rapshon Method
+============================================
+
+
+Polynomial function:
+x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
+============================================
+                    Result
+============================================
+
+Roots found in the given range:
+	x1 = 1.000000
+	x2 = 2.000000
+	x3 = 3.000000
+	x4 = 4.000000
+	x5 = 5.000000
+	x6 = 6.000001
+============================================
+            The task is completed
+============================================
+
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+1. Choose a good initial guess close to the actual root.<br>
+
+2. Ensure f<sup>'</sup>($x_n$) ≠ 0.<br>
+
+3. Need to use double-precision floating values.<br>
+
+4. Have to Ensure the function is differentiable in the interval.<br>
+
+5. Use enough iterations to reach desired accuracy.<br>
+
 <br>
 
 ### ➕ Advantages
+
+1. It features quadratic convergence near the root, meaning the number of correct digits roughly doubles with each step.<br>
+
+2. Unlike bracketing methods, it requires only one initial guess to begin the iteration.<br>
+
+3. The method can be adapted to handle and find complex roots.<br>
+
+4. The method has Simple iterative formula.<br>
 
 <br>
 
 ### ➖ Disadvantages
 
+1. This method Requires derivative of the function.<br>
+
+2. The process may fail to find a root if the initial guess is placed too far from the actual root.<br>
+
+3. The algorithm fails if the derivative becomes zero at any iteration.<br>
+
+4. Depending on the function's shape, the method can converge to the wrong root or enter an infinite oscillation loop between two points.<br>
+
 <br>
 
 ### 🚀 Applications
+
+1. Finding roots of nonlinear algebraic equations.<br>
+
+2. Can be able to solve Solving transcendental equations.<br>
+
+3. Calculating critical tolerances and dimensions in mechanical and structural design calculations.<br>
+
+4. Computing intersection points and rendering complex curves for animations and 3D modeling.<br>
+
+5. Solving stability equations and processing signals in automated control applications.<br>
 
 <br>
 
@@ -1051,24 +1299,182 @@ Output
 
 ### 🤖 Algorithm
 
+**Step 1**: Define the polynomial function f(x) using the given coefficients and specify the tolerance E (stopping criterion) and the maximum number of iterations.<br>
+
+**Step 2**: Identify two initial points, $x_0$ and $x_1$. In your code, these are determined by scanning the range [L, R] with step h until a sign change is found f($x_1$) * f($x_2$) < 0.<br>
+
+**Step 3**: Calculate the next approximation $x_2$ using the secant formula:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$x_2$ = $x_1$ - f($x_1$) * ($x_1$ - $x_0$)(f($x_1$) - f($x_0$)).<br>
+
+**Step 4**: Check if the absolute difference between the last two approximations is less than the tolerance: abs($x_2$ - $x_1$) < E      If true, the root is $x_2$. And Stop the iteration.
+
+**Step 5**: If the stopping criterion is not met:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set $x_0$ = $x_1$.Set $x_1$ = $x_2$.<br>
+Repeat from Step 3 until the root is found or the maximum iterations are reached.
+
 <br>
 
 ### 💻 Secant Method Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+using namespace std;
+
+void prnt() {
+    cout << "============================================\n";
+    cout << "              Secant Method\n";
+    cout << "============================================\n\n";
+}
+
+void RR(){
+    cout << "============================================\n";
+    cout<<"                    Result\n";
+    cout << "============================================\n";
+}
+
+void p(){
+    cout << "============================================\n";
+    cout<<"            The task is completed\n";
+    cout << "============================================\n";
+}
+
+double f(double x, vector<double>& coef){
+    double res = 0.0;
+    int n = coef.size();
+    for(int i = 0; i < n; i++){
+        res += coef[i] * pow(x, n - 1 - i);
+    }
+    return res;
+}
+
+void printPolynomial(vector<double> &coef){
+    cout << "\nPolynomial function:\n";
+    int n = coef.size() - 1;
+
+    for (int i = 0; i <= n; i++) {
+        int power = n - i;
+        if (coef[i] == 0) continue;
+
+        if (i != 0 && coef[i] > 0) cout << " + ";
+        else if (i != 0 && coef[i] < 0) cout << " - ";
+
+        if (power == 0)
+            cout << fabs(coef[i]);
+        else if (power == 1)
+            cout << fabs(coef[i]) << "x";
+        else if (fabs(coef[i]) > 1)
+            cout << fabs(coef[i]) << "x^" << power;
+        else
+            cout << "x^" << power;
+    }
+    cout << " = 0\n";
+}
+
+double secant(vector<double> coef, double x0, double x1, double e, int maxIter) {
+    double x2;
+    for (int iter = 1; iter <= maxIter; iter++) {
+        double f0 = f(x0, coef);
+        double f1 = f(x1, coef);
+
+        if (fabs(f1 - f0) < 1e-12) {
+            cout << "Denominator too small. Method fails.\n";
+            return x1;
+        }
+
+        x2 = x1 - f1 * (x1 - x0) / (f1 - f0);
+
+        if (fabs(x2 - x1) < e)
+            return x2;
+
+        x0 = x1;
+        x1 = x2;
+    }
+    return x1;
+}
+
+int main() {
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+
+    prnt();
+
+    int n;
+    cin >> n;
+
+    vector<double> coef(n + 1);
+    for (int i = 0; i <= n; i++) {
+        cin >> coef[i];
+    }
+
+    double L, R, h;
+    cin >> L >> R;
+    cin >> h;
+
+    double e = 1e-6;
+    int maxIter = 100;
+
+    vector<double> roots;
+
+    double x1 = L, x2 = L + h;
+    while (x2 <= R) {
+        if (f(x1, coef) * f(x2, coef) < 0) {
+            roots.push_back(secant(coef, x1, x2, e, maxIter));
+        }
+        x1 = x2;
+        x2 += h;
+    }
+
+    printPolynomial(coef);
+
+    RR();
+    cout << "\nRoots found in the given range:\n";
+    int i = 0;
+    for (double root : roots) {
+        cout << "\tx" << ++i << " = " 
+             << fixed << setprecision(6) << root << endl;
+    }
+    p();
+
+    return 0;
+}
+
 ```
 <br>
 
 ### 📝 Secant Method Input
 ```
-Input
+6
+1 -21 175 -735 1624 -1764 720
+-5 10
+0.1
+
 ```
 <br>
 
 ### 📤 Secant Method Output
 ```
-Output
+============================================
+              Secant Method
+============================================
+
+
+Polynomial function:
+x^6 - 21x^5 + 175x^4 - 735x^3 + 1624x^2 - 1764x + 720 = 0
+============================================
+                    Result
+============================================
+
+Roots found in the given range:
+	x1 = 1.000000
+	x2 = 2.000000
+	x3 = 3.000000
+	x4 = 4.000000
+	x5 = 5.000000
+	x6 = 6.000000
+============================================
+            The task is completed
+============================================
+
 ```
 <br>
 
@@ -1504,24 +1910,123 @@ Output
 
 ### 🤖 Algorithm
 
+**Step 1**: Define the function f(x) to be integrated and input the lower limit (low), upper limit (up), and the step size (h).<br>
+
+**Step 2**: Determine the number of intervals $n$ using the formula:  n = (up - low)/h.<br>
+
+**Step 3**: Check if n is an even number. If n is odd, the Simpson's 1/3 Rule cannot be applied (return an error or adjust h).<br>
+
+**Step 4**: Calculate the initial sum by adding the function values at the boundaries:  sum = f(low) + f(up).<br>
+
+**Step 5**: Loop through each interval from i = 1 to n-1 : <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update the current x value: x = low + (i * h)$.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If i is odd: Multiply f(x) by 4 and add to the sum.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If i is even: Multiply f(x) by 2 and add to the sum.<br>
+
+**Step 6**: Multiply the total sum by h/3 to get the final result:<br>  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Result = sum * h/3 .<br>
 <br>
 
 ### 💻 Simpson 1/3 Rule Code
 
 ```cpp
-code
+#include<bits/stdc++.h>
+using namespace std;
+
+void prnt() {
+    cout << "============================================\n";
+    cout << "           Simpson 1/3 Method\n";
+    cout << "============================================\n\n";
+}
+
+void R(){
+    cout << "============================================\n";
+    cout<<"                    Result\n";
+    cout << "============================================\n";
+}
+
+void p(){
+    cout << "============================================\n";
+    cout<<"            The task is completed\n";
+    cout << "============================================\n";
+}
+double f(double x) 
+{return (1.0/(1+x*x));}
+
+int main(){
+
+    double low,up,h;
+    char c;
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    prnt();
+    R();
+    while(true){
+    cin>>low>>up>>h;
+
+   int n = (up-low)/h;
+
+   if(n%2==1){
+    cout<<"\t\t\tn must be even\n";
+    cin>>c;
+    if(c=='q') break;
+    else continue;
+   }
+
+    double ans = f(low) + f(up);
+
+    int i = 1;
+    double x = low;
+    for (int i = 1; i < n; i++) {
+        x += h;
+        if (i%2==1)
+            {ans += 4 * f(x);
+            }
+        else
+            {ans += 2 * f(x);
+            }
+    }
+  
+    cout<<"\t\t\tThe ans is : "<<ans *(h/3)<<"\n";
+
+    cin>>c;
+    if(c=='q') break;
+    else continue;
+}
+
+   p();
+
+    return 0;
+}
 ```
 <br>
 
 ### 📝 Simpson 1/3 Rule Input
 ```
-Input
+0 1 0.25
+Y
+0 2 0.5
+Y
+1 5 0.1
+q
 ```
 <br>
 
 ### 📤 Simpson 1/3 Rule Output
 ```
-Output
+============================================
+           Simpson 1/3 Method
+============================================
+
+============================================
+                    Result
+============================================
+			The ans is : 0.785392
+			The ans is : 1.10513
+			The ans is : 0.588003
+============================================
+            The task is completed
+============================================
 ```
 <br>
 
@@ -1557,24 +2062,128 @@ Output
 
 ### 🤖 Algorithm
 
+**Step 1**: Define the function f(x) to be integrated and input the lower limit (low), upper limit (up), and the step size (h).<br>
+
+**Step 2**: Determine the number of intervals $n$ using the formula:  n = (up - low)/h.<br>
+
+**Step 3**: Check if n is a multiple of 3. If n (mod 3) ≠ 0, the Simpson's 3/8 Rule cannot be applied (return an error or adjust h).<br>
+
+**Step 4**: Calculate the initial sum by adding the function values at the boundaries:  sum = f(low) + f(up).<br>
+
+**Step 5**: Loop through each interval from i = 1 to n-1 : <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update the current x value: x = low + (i * h)$.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If i is multiple of 3: Multiply f(x) by 2 and add to the sum.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Otherwise: Multiply f(x) by 3 and add to the sum.<br>
+
+**Step 6**: Multiply the total sum by 3h/8 to get the final result:<br>  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Result = sum * 3*h/8 .<br>
+
+
 <br>
 
 ### 💻 Simpson 3/8 Rule Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+using namespace std;
+
+void prnt() {
+    cout << "============================================\n";
+    cout << "           Simpson 3/8 Method\n";
+    cout << "============================================\n\n";
+}
+
+void R(){
+    cout << "============================================\n";
+    cout<<"                    Result\n";
+    cout << "============================================\n";
+}
+
+void p(){
+    cout << "============================================\n";
+    cout<<"            The task is completed\n";
+    cout << "============================================\n";
+}
+
+double f(double x){
+    return sqrt(x);
+}
+
+int main() {
+    double low, up, h;
+            char c;
+
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+	prnt();
+
+    R();
+
+    while (true) {
+        cin >> low >> up >> h;
+
+        int n = (up - low) / h;
+
+        if (n % 3 != 0) {
+            cout << "\t\t\tn must be multiple of 3\n";
+               cin >> c;
+        if (c == 'q') break;
+        else continue;
+        }
+
+        double ans = f(low) + f(up);
+        double x = low;
+
+        for (int i = 1; i < n; i++) {
+            x += h;
+            if (i % 3 == 0)
+                ans += 2 * f(x);
+            else
+                ans += 3 * f(x);
+        }
+
+        ans = ans * (3 * h / 8);
+        cout <<"\t\t\tThe ans is : "<< ans << "\n";
+
+
+        cin >> c;
+        if (c == 'q') break;
+    }
+    p();
+
+    return 0;
+}
+
 ```
 <br>
 
 ### 📝 Simpson 3/8 Rule Input
 ```
-Input
+0 0.45 0.05
+Y
+0 4.5 0.5
+Y
+1 5 0.1
+q
 ```
 <br>
 
 ### 📤 Simpson 3/8 Rule Output
 ```
-Output
+============================================
+           Simpson 3/8 Method
+============================================
+
+============================================
+                    Result
+============================================
+			The ans is : 0.200141
+			The ans is : 6.32902
+			n must be multiple of 3
+============================================
+            The task is completed
+============================================
+
 ```
 <br>
 
