@@ -230,22 +230,187 @@
 <br>
 
 <details>
-<summary><a href = "#Numerical-Differentiation">🔹 Numerical Differentiation</a></summary>
+<summary><a href = "#Differentiation-Using-Forward-Interpolation">🔹 Differentiation Using Forward Interpolation</a></summary>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📖 [Theory](#-Numerical-Differentiation-Theory)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💻 [Code](#-Numerical-Differentiation-Code)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📝 [Input](#-Numerical-Differentiation-Input)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📤 [Output](#-Numerical-Differentiation-Output)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📖 [Theory](#-Differentiation-Using-Forward-Interpolation-Theory)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💻 [Code](#-Differentiation-Using-Forward-Interpolationn-Code)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📝 [Input](#-Differentiation-Using-Forward-Interpolation-Input)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📤 [Output](#-Differentiation-Using-Forward-Interpolation-Output)  
+
+</details>
+<br>
+
+<details>
+<summary><a href = "#Differentiation-Using-Backward-Interpolation">🔹 Differentiation Using Backward Interpolation</a></summary>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📖 [Theory](#-Differentiation-Using-Backward-Interpolation-Theory)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💻 [Code](#-Differentiation-Using-Backward-Interpolationn-Code)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📝 [Input](#-Differentiation-Using-Backward-Interpolation-Input)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📤 [Output](#-Differentiation-Using-Backward-Interpolation-Output)  
 
 </details>
 <br>
 </details>
-
-
 
 ---
 
 <br>
+
+# Project Structure
+```
+Numerical-Methods-Project/
+│
+├── README.md
+│
+├── 01_Solution_of_Linear_Equations/
+│   │
+│   ├── Gauss_Elimination/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── gauss_elimination.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   ├── Gauss_Jordan_Elimination/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── gauss_jordan.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   ├── LU_Factorization/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── lu_factorization.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   └── Matrix_Inversion/
+│       ├── theory.md
+│       ├── code/
+│       │   └── matrix_inversion.cpp
+│       ├── input.txt
+│       └── output.txt
+│
+├── 02_Solution_of_Non_Linear_Equations/
+│   │
+│   ├── Bisection_Method/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── bisection.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   ├── False_Position_Method/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── false_position.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   ├── Newton_Raphson_Method/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── newton_raphson.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   └── Secant_Method/
+│       ├── theory.md
+│       ├── code/
+│       │   └── secant.cpp
+│       ├── input.txt
+│       └── output.txt
+│
+├── 03_Curve_Fitting_Regression/
+│   │
+│   ├── Least_Square_Linear/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── ls_linear.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   ├── Least_Square_Transcendental/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── ls_transcendental.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   └── Least_Square_Polynomial/
+│       ├── theory.md
+│       ├── code/
+│       │   └── ls_polynomial.cpp
+│       ├── input.txt
+│       └── output.txt
+│
+├── 04_Interpolation/
+│   │
+│   ├── Newton_Forward/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── newton_forward.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   ├── Newton_Backward/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── newton_backward.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   └── Newton_Divided_Difference/
+│       ├── theory.md
+│       ├── code/
+│       │   └── newton_divided_difference.cpp
+│       ├── input.txt
+│       └── output.txt
+│
+├── 05_Ordinary_Differential_Equations/
+│   │
+│   └── Runge_Kutta_Method/
+│       ├── theory.md
+│       ├── code/
+│       │   └── runge_kutta.cpp
+│       ├── input.txt
+│       └── output.txt
+│
+├── 06_Integration/
+│   │
+│   ├── Simpson_One_Third_Rule/
+│   │   ├── theory.md
+│   │   ├── code/
+│   │   │   └── simpson_1_3.cpp
+│   │   ├── input.txt
+│   │   └── output.txt
+│   │
+│   └── Simpson_Three_Eighth_Rule/
+│       ├── theory.md
+│       ├── code/
+│       │   └── simpson_3_8.cpp
+│       ├── input.txt
+│       └── output.txt
+│
+├── 07_Differentiation/
+    │
+    ├── Forward_Interpolation_Method/
+    │   ├── theory.md
+    │   ├── code/
+    │   │   └── differentiation_forward.cpp
+    │   ├── input.txt
+    │   └── output.txt
+    │
+    └── Backward_Interpolation_Method/
+        ├── theory.md
+        ├── code/
+        │   └── differentiation_backward.cpp
+        ├── input.txt
+        └── output.txt
+
+
+```
 
 # Solution of Linear Equations
 
@@ -583,7 +748,7 @@ x5 = 1.18462
 
 - Used as foundation for LU decomposition and matrix inversion
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Gauss-Jordan Elimination Method
@@ -879,7 +1044,7 @@ x5 = 1.18462
 
 - Circuit analysis and network flow problems
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## LU-Factorization Method
@@ -1251,7 +1416,7 @@ x5 = 1.18462
 
 - Numerical optimization algorithms requiring repeated linear system solutions
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Matrix Inversion Method
@@ -1595,7 +1760,7 @@ x5 = 1.18462
 
 - Applied in computer graphics for transformations 
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 # Solution of Non-Linear Equations
@@ -1887,7 +2052,7 @@ The task is completed
 
 4. Finding the highest or lowest points of a curve by locating the roots of the function's derivative.<br>
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## False Position Method
@@ -2152,9 +2317,8 @@ The task is completed
 3. Solving for equilibrium points in systems involving non-linear forces or complex potential energy surfaces.<br>
 
 4. Identifying the local extrema of a function by finding the roots of its first derivative.<br>
-
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Newton-Raphson Method
@@ -2415,9 +2579,8 @@ The task is completed
 4. Computing intersection points and rendering complex curves for animations and 3D modeling.<br>
 
 5. Solving stability equations and processing signals in automated control applications.<br>
-
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Secant Method
@@ -2666,9 +2829,8 @@ The task is completed
 3. Can solve the numerical methods in computer science.<br>
 
 4. Can able to solve physics and applied mathematics problems.<br>
-
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 
@@ -2931,9 +3093,8 @@ Estimate the value of y for x = 6 : 12
 - Analyzing trends in economics and business
 
 - Finding relationships between variables in scientific experiments
-  
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Least Square Regression (Transcendental Equation)
@@ -3229,9 +3390,8 @@ Estimate the value of y for x = 6 : 189.761
 - Population growth and decline modeling 
 
 - Learning curves
-  
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Least Square Regression (Polynomial Equation)
@@ -3541,10 +3701,8 @@ y = 5 + 1x - 2x^2 + 1x^3
 - Modeling growth curves, fitting experimental data in physics and engineering
  
 - Modeling non-linear relationships in data science
-  
 <br>
-
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 
@@ -3720,7 +3878,7 @@ Print the answer: 165
 - Engineering and scientific computations.
 - Estimation of missing values in tabulated data.
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Newton Backward Interpolation Method
@@ -3898,7 +4056,7 @@ Print the answer: 105
 - Engineering and scientific problem solving.
 - Interpolation of values near the upper boundary of datasets.
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Newton Divided Difference Interpolation Method
@@ -3951,7 +4109,7 @@ Output
 ### 🚀 Applications
 
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 
@@ -4010,9 +4168,9 @@ Output
 <br>
 
 ### 🚀 Applications
-
+- Aplications
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 
@@ -4203,9 +4361,8 @@ q
 2. Determining volumes, work done, and other physical quantities where analytical integration is difficult.<br>
 
 3. Used in computer simulations and numerical analysis to approximate definite integrals.<br>
-
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 ## Simpson 3/8 Rule
@@ -4396,9 +4553,8 @@ q
 2. This method can Solve problems in applied mathematics where analytical integration is difficult.<br>
 
 3. Useful in computer simulations and numerical analysis for approximating integrals.<br>
-
 <br>
-
+[Back to Top](#-Table-of-Contents)
 ---
 
 
@@ -4408,11 +4564,12 @@ q
 <br>
 
 
-## Numerical Differentiation
+## Differentiation Using Forward Interpolation
+
 
 <br>
 
-### 📖 Numerical Differentiation Theory
+### 📖 Differentiation Using Forward Interpolation Theory
 
 <br>
 
@@ -4424,20 +4581,20 @@ q
 
 <br>
 
-### 💻 Numerical Differentiation Code
+### 💻 Differentiation Using Forward Interpolation Code
 
 ```cpp
 code
 ```
 <br>
 
-### 📝 Numerical Differentiation Input
+### 📝 Differentiation Using Forward Interpolation Input
 ```
 Input
 ```
 <br>
 
-### 📤 Numerical Differentiation Output
+### 📤 Differentiation Using Forward Interpolation Output
 ```
 Output
 ```
@@ -4456,10 +4613,65 @@ Output
 <br>
 
 ### 🚀 Applications
+- Applications
+<br>
+[Back to Top](#-Table-of-Contents)
+---
+
+## Differentiation Using Backward Interpolation
+
 
 <br>
 
+### 📖 Differentiation Using Backward Interpolation Theory
+
+<br>
+
+### 🔢 Mathematical Representation
+
+<br>
+
+### 🤖 Algorithm
+
+<br>
+
+### 💻 Differentiation Using Backward Interpolation Code
+
+```cpp
+code
+```
+<br>
+
+### 📝 Differentiation Using Backward Interpolation Input
+```
+Input
+```
+<br>
+
+### 📤 Differentiation Using Backward Interpolation Output
+```
+Output
+```
+<br>
+
+### 🎯 Accuracy Consideration
+
+<br>
+
+### ➕ Advantages
+
+<br>
+
+### ➖ Disadvantages
+
+<br>
+
+### 🚀 Applications
+- Applications
+<br>
+[Back to Top](#-Table-of-Contents)
 ---
+
 
 
 
