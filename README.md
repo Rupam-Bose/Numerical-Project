@@ -249,6 +249,42 @@
 
 # Solution of Linear Equations
 
+A linear Equations with n variable has the form:
+```
+a₁x₁ + a₂x₂ + … + aₙxₙ = b
+```
+To find a unique solution, we need a set of n such independent equations. This set of equations is known as a system of equations. A system of n linear equations is written as:
+```
+a₁₁x₁ + a₁₂x₂ + ... + a₁ₙxₙ = b₁
+a₂₁x₁ + a₂₂x₂ + ... + a₂ₙxₙ = b₂
+.
+.
+.
+aₙ₁x₁ + aₙ₂x₂ + ... + aₙₙxₙ = bₙ
+```
+The matrix form of a linear system of n linear equations can written as:
+```
+Ax = b
+```
+where, 
+
+`A = [aᵢⱼ]` - A is the coefficient matrix of order `n x n`
+
+`x = [x₁ x₂ ... xₙ]ᵀ` - x is the vector of unknowns
+
+`b = [b₁ b₂ ... bₙ]ᵀ` - b is the constant matrix
+
+
+The techniques for solving system of linear equations are:
+  - Elimination approach
+  - Iterative approach
+
+The most commonly used elimination methods are:
+  - Gauss elimination method
+  - Gauss-Jordan elimination method
+  - LU decomposition method
+  - Matrix inversion method
+    
 <br>
 ---
 
@@ -258,6 +294,14 @@
 
 ### 📖 Gauss Elimination Method Theory
 
+Gauss elimination method is a row reduction algorithm to solve linear systems. It is operated on augmented matrix,which combine the coefficient matrix and constant matrix. 
+
+The procedure comprises of two phases:
+
+  1. *Forward Elimination Phase*: In this phase, the augmented matrix `[A | b]` is converted to upper triangular matrix through a series of elemintary row operations. 
+
+  2. *Backward Substitution Phase*: After obtaining the reduced form of the matrix, the solution vector is found by back substitution process, starting from the last equation and moving upward.
+     
 <br>
 
 ### 🔢 Mathematical Representation
@@ -266,41 +310,282 @@
 
 ### 🤖 Algorithm
 
+  1. Perform partial pivoting for each row to select the largest element as the pivot of that row by swapping operation. The pivoting is done to avoid division by zero and round-off errors.
+
+  2. Convert the augemented matrix `[A | b]` into `[U | c]` where U is the upper triangular matrix. For each pivot row, eliminate all the elements below the pivot using the elementary row operation:
+  ```
+    A[j] = A[j] - (A[j][i] / A[i][i]) * A[i]
+  ``` 
+
+  3. Use back substitution to solve `Ux = c` to obtain `x`. We start from the last variable and substitute back into previous equations until all the unknowns are found.
+
+  4. Before back substitution, check if the system has a unique solution by verifying `U[n-1][n-1]` and `c[n-1]`. 
+
+     - If U[n-1][n-1] = 0 and c[n-1] = 0, the system has infinite solutions.
+
+     - If U[n-1][n-1] = 0 and c[n-1] != 0, the system has no solution.
+
+     - If U[n-1][n-1] != 0 and c[n-1] != 0, the system has unique solution.
+
 <br>
 
 ### 💻 Gauss Elimination Method Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include <fstream>
+using namespace std;
+
+//-----Forward Elimination phase: Converting the Conefficient Matrix into Upper Triangular Matrix with pivoting------
+void forwardd(vector<vector<double>> &cof)
+{
+    int n = cof.size();
+    for (int i = 0; i < n - 1; i++)
+    {
+        int pivot = i;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (fabs(cof[j][i]) > fabs(cof[pivot][i]))
+                pivot = j;
+        }
+
+        if (pivot != i)
+            swap(cof[i], cof[pivot]);
+
+        if (fabs(cof[i][i]) < 1e-9)
+            continue;
+
+        double x = cof[i][i];
+
+        for (int k = i + 1; k < n; k++)
+        {
+            double y = cof[k][i];
+            for (int j = i; j < n + 1; j++)
+            {
+                cof[k][j] = cof[k][j] - cof[i][j] * y / x;
+            }
+        }
+    }
+}
+
+//------Back Substition Phase: Finding the solution vector------
+void backwardd(vector<vector<double>> &cof, vector<double> &ans)
+{
+    int n = cof.size();
+    for (int i = n - 1; i >= 0; i--)
+    {
+        double sum = 0;
+        for (int j = i + 1; j < n; j++)
+        {
+            sum += ans[j] * cof[i][j];
+        }
+        ans[i] = (cof[i][n] - sum) / cof[i][i];
+    }
+}
+
+//------Printing the Linear System-------
+void systemPrint(vector<vector<double>> &cof, ofstream &fout)
+{
+    fout << "The Linear System: \n";
+    int n = cof.size();
+    for (int i = 0; i < n; i++)
+    {
+        fout << cof[i][0] << "*x" << 1 << " ";
+        for (int j = 1; j < n; j++)
+        {
+            if (cof[i][j] >= 0)
+                fout << " + ";
+            fout << cof[i][j] << "*x" << j + 1 << " ";
+        }
+        fout << " = " << cof[i][n] << '\n';
+    }
+}
+
+void solve(ifstream &fin, ofstream &fout)
+{
+    //------Reading the number of linear equations of the linear system------
+    int n;
+    fin >> n;
+
+    vector<vector<double>> cof(n, vector<double>(n + 1));
+
+    //------Reading the Conefficient Matrix------
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n + 1; j++)
+        {
+            fin >> cof[i][j];
+        }
+    }
+
+    systemPrint(cof, fout);
+
+    forwardd(cof);
+
+    //------Handling the solutions type of the system------
+    if (cof[n - 1][n - 1] == 0 && cof[n - 1][n])
+    {
+        fout << "\nThe system has NO SOLUTION.\n";
+    }
+
+    else if (cof[n - 1][n - 1] == 0 && cof[n - 1][n] == 0)
+    {
+        fout << "\nThe system has INFINITE SOLUTIONS.\n";
+    }
+
+    else
+    {
+        fout << "\nThe system has UNIQUE SOLUTION.\n";
+        vector<double> ans(n, 0);
+        backwardd(cof, ans);
+
+        //------Printing the solutions of the System------
+        fout << "\nSolutions: \n";
+        for (int i = 0; i < n; i++)
+        {
+            fout << "x" << i + 1 << " = " << ans[i] << '\n';
+        }
+    }
+}
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    fout << "Solution of Linear System using Gauss Elimination Method\nMultiple Testcases\n\n";
+
+    if (!fin)
+    {
+        fout << "File not found.\n";
+        return 0;
+    }
+
+    //------Mutiple Test Cases------
+    int t;
+    fin >> t;
+
+    int cse = 1;
+
+    while (t--)
+    {
+        for (int i = 0; i < 45; i++)
+            fout << "=";
+        fout << '\n';
+        fout << "Test case: " << cse << "\n";
+        solve(fin, fout);
+        cse++;
+    }
+}
 ```
 <br>
 
 ### 📝 Gauss Elimination Method Input
 ```
-Input
+4
+3
+3 6 1 16
+2 4 3 13
+1 3 2 9
+2
+1 1 2
+2 2 4
+2
+1 1 2
+2 2 5
+5
+2 1 -1 3 2 9
+1 3 2 -1 1 8
+3 2 4 1 -2 20
+2 1 3 2 1 17
+1 -1 2 3 4 15
 ```
 <br>
 
 ### 📤 Gauss Elimination Method Output
 ```
-Output
+Solution of Linear System using Gauss Elimination Method
+Multiple Testcases
+
+=============================================
+Test case: 1
+The Linear System: 
+3*x1  + 6*x2  + 1*x3  = 16
+2*x1  + 4*x2  + 3*x3  = 13
+1*x1  + 3*x2  + 2*x3  = 9
+
+The system has UNIQUE SOLUTION.
+
+Solutions: 
+x1 = 1
+x2 = 2
+x3 = 1
+=============================================
+Test case: 2
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 4
+
+The system has INFINITE SOLUTIONS.
+=============================================
+Test case: 3
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 5
+
+The system has NO SOLUTION.
+=============================================
+Test case: 4
+The Linear System: 
+2*x1  + 1*x2 -1*x3  + 3*x4  + 2*x5  = 9
+1*x1  + 3*x2  + 2*x3 -1*x4  + 1*x5  = 8
+3*x1  + 2*x2  + 4*x3  + 1*x4 -2*x5  = 20
+2*x1  + 1*x2  + 3*x3  + 2*x4  + 1*x5  = 17
+1*x1 -1*x2  + 2*x3  + 3*x4  + 4*x5  = 15
+
+The system has UNIQUE SOLUTION.
+
+Solutions: 
+x1 = 5.15385
+x2 = -1
+x3 = 2.26154
+x4 = -0.138462
+x5 = 1.18462
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+- Floating point error may occur due to division and subtraction operations.
+
+- Partial pivoting helps avoiding division by zero and round-off errors.
+
+- Using a tolerant value(i.e `1e-9`) helps avoid division by small numbers.
 <br>
 
 ### ➕ Advantages
 
+- Is straightforward and easy to understand.
+
+- Can be easily implemented in computer programs.
+
+- Widely applicable to various types of systems of linear equations.
 <br>
 
 ### ➖ Disadvantages
 
+- Can be computationally expensive for large systems with many equations.
+
+- The method may suffer from round off errors while dealing with floating point arithmetic.
 <br>
 
 ### 🚀 Applications
 
+- Solving linear systems in Physics and Engineering
+
+- Determining rank and determinant of matrices
+
+- Used as foundation for LU decomposition and matrix inversion
 <br>
 
 ---
@@ -311,6 +596,12 @@ Output
 
 ### 📖 Gauss-Jordan Elimination Method Theory
 
+Gauss-Jordan elimination method is an extension of Gauss elimination used to solve systems of linear equations. Both methods use systematic elimination of variables through row operations.
+
+The key difference between the methods is that Gauss elimination eliminates variables only below the pivot elements, producing an upper triangular matrix, while Gauss-Jordan elimination eliminates variables from all other rows (both above and below the pivot), resulting in a reduced row echelon form (identity matrix). This allows us to obtain the unknowns directly without employing back substitution.
+
+The method transforms the augmented matrix `[A | b]` into `[I | x]` where I is the identity matrix and x is the solution vector. 
+
 <br>
 
 ### 🔢 Mathematical Representation
@@ -319,41 +610,282 @@ Output
 
 ### 🤖 Algorithm
 
+ 1. Select the pivot element for each row by swapping the rows for the largest element of that column.
+
+ 2. For each pivot row, normalize the row by its pivot element to make the diagonal 1.
+
+ 3. Eliminate the variable from all the other rows above and below the pivot to convert the augmented matrix `[A|b]` into `[I|c]` where I is the identity matrix.
+
+ 4. After obtaining the diagonal matrix, the solution is directly read from the last column of the resulting augmented matrix.
+ ```
+ x₁ = c₁, x₂ = c₂, …, xₙ = cₙ
+ ```
 <br>
 
 ### 💻 Gauss-Jordan Elimination Method Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include <fstream>
+using namespace std;
+
+//-----Forward Elimination phase: Converting the Conefficient Matrix into Identity Matrix with partial pivoting------
+void forwardd(vector<vector<double>> &cof)
+{
+    int n = cof.size();
+    for (int i = 0; i < n; i++)
+    {
+        int pivot = i;
+
+        for (int j = i + 1; j < n; j++)
+        {
+            if (fabs(cof[j][i]) > fabs(cof[pivot][i]))
+                pivot = j;
+        }
+
+        if (pivot != i)
+            swap(cof[i], cof[pivot]);
+
+        if (fabs(cof[i][i]) < 1e-9)
+            continue;
+
+        double x = cof[i][i];
+
+        for (int j = i; j < n + 1; j++)
+        {
+            if (cof[i][j])
+                cof[i][j] /= x;
+        }
+
+        for (int k = 0; k < n; k++)
+        {
+            if (k != i)
+            {
+                double y = cof[k][i];
+                for (int j = 0; j < n + 1; j++)
+                {
+                    if (k != i)
+                        cof[k][j] -= cof[i][j] * y;
+                }
+            }
+        }
+    }
+}
+
+//------Printing the Linear System-------
+void systemPrint(vector<vector<double>> &cof, ofstream &fout)
+{
+    fout << "The Linear System: \n";
+    int n = cof.size();
+    for (int i = 0; i < n; i++)
+    {
+        fout << cof[i][0] << "*x" << 1 << " ";
+
+        for (int j = 1; j < n; j++)
+        {
+            if (cof[i][j] >= 0)
+                fout << " + ";
+            fout << cof[i][j] << "*x" << j + 1 << " ";
+        }
+
+        fout << " = " << cof[i][n] << '\n';
+    }
+}
+
+void solve(ifstream &fin, ofstream &fout)
+{
+    //------Reading the number of linear equations of the linear system------
+    int n;
+    fin >> n;
+
+    vector<vector<double>> cof(n, vector<double>(n + 1));
+
+    //------Reading the Conefficient Matrix------
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n + 1; j++)
+        {
+            fin >> cof[i][j];
+        }
+    }
+
+    systemPrint(cof, fout);
+
+    forwardd(cof);
+
+    //------Handling the solutions type of the system------
+    if (cof[n - 1][n - 1] == 0 && cof[n - 1][n])
+    {
+        fout << "\nThe system has NO SOLUTION.\n";
+    }
+
+    else if (cof[n - 1][n - 1] == 0 && cof[n - 1][n] == 0)
+    {
+        fout << "\nThe system has INFINITE SOLUTIONS.\n";
+    }
+
+    else
+    {
+        fout << "\nThe system has UNIQUE SOLUTION.\n";
+
+        vector<double> ans;
+
+        for (int i = 0; i < n; i++)
+        {
+            ans.push_back(cof[i][n]);
+        }
+
+        //------Printing the solutions of the System------
+        fout << "\nSolutions: \n";
+        for (int i = 0; i < n; i++)
+        {
+            fout << "x" << i + 1 << " = " << ans[i] << '\n';
+        }
+    }
+}
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+
+    fout << "Solution of Linear System using Gauss-Jordan Elimination Method\nMultiple Testcases\n\n";
+
+    if (!fin)
+    {
+        fout << "File not found.\n";
+        return 0;
+    }
+
+    //------Mutiple Test Cases------
+    int t;
+    fin >> t;
+
+    int cse = 1;
+
+    while (t--)
+    {
+        for (int i = 0; i < 45; i++)
+            fout << "=";
+        fout << '\n';
+        fout << "Test case: " << cse << "\n";
+        solve(fin, fout);
+        cse++;
+    }
+}
 ```
 <br>
 
 ### 📝 Gauss-Jordan Elimination Method Input
 ```
-Input
+4
+3
+3 6 1 16
+2 4 3 13
+1 3 2 9
+2
+1 1 2
+2 2 4
+2
+1 1 2
+2 2 5
+5
+2 1 -1 3 2 9
+1 3 2 -1 1 8
+3 2 4 1 -2 20
+2 1 3 2 1 17
+1 -1 2 3 4 15
 ```
 <br>
 
 ### 📤 Gauss-Jordan Elimination Method Output
 ```
-Output
+Solution of Linear System using Gauss-Jordan Elimination Method
+Multiple Testcases
+
+=============================================
+Test case: 1
+The Linear System: 
+3*x1  + 6*x2  + 1*x3  = 16
+2*x1  + 4*x2  + 3*x3  = 13
+1*x1  + 3*x2  + 2*x3  = 9
+
+The system has UNIQUE SOLUTION.
+
+Solutions: 
+x1 = 1
+x2 = 2
+x3 = 1
+=============================================
+Test case: 2
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 4
+
+The system has INFINITE SOLUTIONS.
+=============================================
+Test case: 3
+The Linear System: 
+1*x1  + 1*x2  = 2
+2*x1  + 2*x2  = 5
+
+The system has NO SOLUTION.
+=============================================
+Test case: 4
+The Linear System: 
+2*x1  + 1*x2 -1*x3  + 3*x4  + 2*x5  = 9
+1*x1  + 3*x2  + 2*x3 -1*x4  + 1*x5  = 8
+3*x1  + 2*x2  + 4*x3  + 1*x4 -2*x5  = 20
+2*x1  + 1*x2  + 3*x3  + 2*x4  + 1*x5  = 17
+1*x1 -1*x2  + 2*x3  + 3*x4  + 4*x5  = 15
+
+The system has UNIQUE SOLUTION.
+
+Solutions: 
+x1 = 5.15385
+x2 = -1
+x3 = 2.26154
+x4 = -0.138462
+x5 = 1.18462
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
 
+- Small pivots can cause round-off errors as the method involves division by pivot elements
+
+- Partial pivoting helps maintain numerical stability by choosing the largest available element
+
+- Direct solution avoids accumulation of back substitution errors
 <br>
 
 ### ➕ Advantages
 
+- Simple and straightforward to implement for small to medium-sized systems
+
+- Produces the solution directly without requiring back substitution
+
+- Can clearly identify whether a system has unique, no, or infinitely many solutions
+
+- Forms the theoretical basis for methods like matrix inversion
 <br>
 
 ### ➖ Disadvantages
 
+- Computationally more expensive for large systems.
+
+- Requires more arithmetic operations than standard Gauss elimination.
+
+- Sensitive to round-off errors without proper pivoting.
 <br>
 
 ### 🚀 Applications
 
+- Solving systems of linear equations in engineering and physics
+
+- Finding rank and determinant of matrices
+
+- Circuit analysis and network flow problems
 <br>
 
 ---
