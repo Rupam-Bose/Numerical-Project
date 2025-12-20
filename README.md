@@ -2848,7 +2848,10 @@ Output
 <br>
 
 ### 📖 Newton Forward Interpolation Method Theory
+Newton’s Forward Interpolation Method is used to estimate the value of a function at a given point using equally spaced data points.  
+It is most suitable when the interpolation point lies near the **beginning of the data table**. The method constructs a polynomial using forward differences.
 
+---
 <br>
 
 ### 🔢 Mathematical Representation
@@ -2856,42 +2859,156 @@ Output
 <br>
 
 ### 🤖 Algorithm
+1. Arrange the given data points with equal intervals.
+2. Construct the forward difference table.
+3. Compute the interpolation parameter:
+```
+u = (x − x0) / h
 
+```
+4. Apply Newton’s forward interpolation formula:
+```
+y ≈ y0+ uΔy0+ u(u−1)/2! Δ²y0+ u(u−1)(u−2)/3! Δ³y0+...
+```
+5. Evaluate the polynomial to obtain the interpolated value.
 <br>
 
 ### 💻 Newton Forward Interpolation Method Code
 
 ```cpp
-code
+#include<bits/stdc++.h>
+#include<fstream>
+using namespace std;
+
+double u_cal(int n,double u){
+double temp=u;
+for(int i=1;i<n;i++){
+ temp*=(u-i);
+}
+return temp;
+}
+
+int fact(int n){
+    int f=1;
+    for(int i=2;i<=n;i++){
+        f*=i;
+    }
+    return f;
+}
+
+double nf(vector<vector<double>>& y, vector<double>& x,double val,ofstream& fout){
+int n=x.size();
+
+//create difference table
+
+for(int i=1;i<n;i++){
+    for(int j=0;j<n-i;j++){
+        y[j][i]=y[j+1][i-1]-y[j][i-1];
+    }
+}
+
+//print forward difference table
+
+fout<<"Forward difference table\n";
+
+for(int i=0;i<n;i++){
+    fout<<x[i]<<" ";
+    for(int j=0;j<n-i;j++){
+        fout<<y[i][j]<<" ";
+    }fout<<endl;
+}fout<<endl;
+
+double ans=y[0][0];
+
+double u=(val-x[0])/(x[1]-x[0]);
+
+for(int i=1;i<n;i++){
+    ans+=(u_cal(i,u)*y[0][i])/fact(i);
+}
+return ans;
+}
+
+
+int main(){
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+int n;
+fin>>n;
+
+vector<double> x(n),y0(n);
+vector<vector<double>> y(n,vector<double>(n));
+
+
+for(int i=0;i<n;i++){
+    fin>>x[i];
+}
+
+for(int i=0;i<n;i++){
+    fin>>y0[i];
+}
+
+for(int i=0;i<n;i++){
+   y[i][0]=y0[i];
+}
+
+double val;
+fin>>val;
+
+double ans=nf(y,x,val);
+
+
+fout<<"Print the answer : "<<ans<<endl;
+    return 0;
+}
+
 ```
 <br>
 
 ### 📝 Newton Forward Interpolation Method Input
 ```
-Input
+4
+3 5 7 9
+180 150 120 90
+4
 ```
 <br>
 
 ### 📤 Newton Forward Interpolation Method Output
 ```
-Output
+Print the answer: 165
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
+- Accuracy depends on the step size **h**.
+- Smaller values of **h** give better accuracy.
+- Higher-order differences may introduce numerical errors.
+- Best results are obtained when the interpolation point is close to the first data value.
+
+---
 
 <br>
 
 ### ➕ Advantages
+- Simple and easy to implement.
+- Suitable for equally spaced data.
+- Efficient when interpolation is required near the beginning of the table.
 
+---
 <br>
 
 ### ➖ Disadvantages
+- Not suitable for unequally spaced data.
+- Accuracy decreases for points far from the starting value.
+- Higher-order terms increase computational complexity.
 
+---
 <br>
 
 ### 🚀 Applications
-
+- Numerical analysis problems.
+- Engineering and scientific computations.
+- Estimation of missing values in tabulated data.
 <br>
 
 ---
