@@ -3018,7 +3018,10 @@ Print the answer: 165
 <br>
 
 ### 📖 Newton Backward Interpolation Method Theory
+Newton’s Backward Interpolation Method is used to estimate the value of a function from equally spaced data points when the interpolation point lies near the **end of the data table**.  
+It constructs an interpolation polynomial using backward differences.
 
+---
 <br>
 
 ### 🔢 Mathematical Representation
@@ -3026,42 +3029,164 @@ Print the answer: 165
 <br>
 
 ### 🤖 Algorithm
+1. Arrange the given data points with equal intervals.
+2. Construct the backward difference table.
+3. Compute the interpolation parameter:
+```
+v = (x − xn) / h
+```
+4. Apply Newton’s backward interpolation formula:
+```
+y ≈ yn+ v∇yn+ v(v+1)/2! ∇²yn+ v(v+1)(v+2)/3! ∇³yn+...
 
+```
 <br>
 
 ### 💻 Newton Backward Interpolation Method Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include<fstream>
+
+using namespace std;
+
+float u_calc(float u, int n)
+{
+    float temp = u;
+    for (int i = 1; i < n; i++)
+    {
+        temp *= (u + i);
+    }
+    return temp;
+}
+
+int fact(int n)
+{
+    int f = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        f *= i;
+    }
+    return f;
+}
+
+float newton_backward(vector<float> &x, vector<vector<float>> &y, float val,ofstream& fout)
+{
+    int n = x.size();
+
+    // find difference table
+
+    for (int i = 1; i < n; i++)
+    {
+        for (int j = n - 1; j >= i; j--)
+        {
+            y[j][i] = y[j][i - 1] - y[j - 1][i - 1];
+        }
+    }
+
+    // display backward difference table
+
+    for (int i = 0; i < n; i++)
+    {
+	   fout<<x[i]<<" ";
+        for (int j = 0; j <= i; j++)
+        {
+            fout << y[i][j] << " ";
+        }
+        fout << endl;
+    }
+
+    float ans = y[n - 1][0];
+    float u = (val - x[n - 1]) / (x[1] - x[0]);
+
+    for (int i = 1; i < n; i++)
+    {
+        ans += (u_calc(u, i) * y[n - 1][i]) / fact(i);
+    }
+
+    return ans;
+}
+
+int main()
+{
+    ifstream fin("inp.txt");
+    ofstream fout("out.txt");
+    int n;
+    fin >> n;
+
+    vector<float> x(n), y0(n);
+
+    for (int i = 0; i < n; i++)
+    {
+        fin >> x[i];
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        fin >> y0[i];
+    }
+
+    vector<vector<float>> y(n, vector<float>(n, 0));
+
+    for (int i = 0; i < n; i++)
+    {
+        y[i][0] = y0[i];
+    }
+
+    float val;
+    fin >> val;
+
+    float ans = newton_backward(x, y, val,fout);
+    fout << "Print the answer: "<< ans << endl;
+    return 0;
+} 
 ```
 <br>
 
 ### 📝 Newton Backward Interpolation Method Input
 ```
-Input
+4
+3 5 7 9
+180 150 120 90
+8
 ```
 <br>
 
 ### 📤 Newton Backward Interpolation Method Output
 ```
-Output
+Print the answer: 105
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
+- Accuracy depends on the step size **h**.
+- Smaller **h** improves precision.
+- Higher-order backward differences may increase numerical errors.
+- Most accurate when the interpolation point is close to the last data value.
 
+---
 <br>
 
 ### ➕ Advantages
+- Simple and systematic method.
+- Efficient for interpolation near the end of the table.
+- Works well with equally spaced data.
 
+---
 <br>
 
 ### ➖ Disadvantages
+- Not applicable to unequally spaced data.
+- Accuracy decreases for points far from the table end.
+- Computational effort increases with higher-order terms.
 
+---
 <br>
 
 ### 🚀 Applications
-
+- Numerical computation and data estimation.
+- Engineering and scientific problem solving.
+- Interpolation of values near the upper boundary of datasets.
 <br>
 
 ---
