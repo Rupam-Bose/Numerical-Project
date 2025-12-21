@@ -1,3 +1,12 @@
+# Numerical Methods Analysis 
+
+Course No: CSE 2208
+Course Title: Numerical Methods Laboratory
+
+Presented By:
+Rupam Bose(2207038)		Shahira Alima(2207043)		Suhita Islam Aurthi(2207052)
+
+
 # 📘 Table of Contents
 
 <details>
@@ -233,7 +242,7 @@
 <summary><a href = "#Differentiation-Using-Forward-Interpolation">🔹 Differentiation Using Forward Interpolation</a></summary>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📖 [Theory](#-Differentiation-Using-Forward-Interpolation-Theory)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💻 [Code](#-Differentiation-Using-Forward-Interpolationn-Code)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💻 [Code](#-Differentiation-Using-Forward-Interpolation-Code)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📝 [Input](#-Differentiation-Using-Forward-Interpolation-Input)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📤 [Output](#-Differentiation-Using-Forward-Interpolation-Output)  
 
@@ -244,7 +253,7 @@
 <summary><a href = "#Differentiation-Using-Backward-Interpolation">🔹 Differentiation Using Backward Interpolation</a></summary>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📖 [Theory](#-Differentiation-Using-Backward-Interpolation-Theory)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💻 [Code](#-Differentiation-Using-Backward-Interpolationn-Code)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💻 [Code](#-Differentiation-Using-Backward-Interpolation-Code)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📝 [Input](#-Differentiation-Using-Backward-Interpolation-Input)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📤 [Output](#-Differentiation-Using-Backward-Interpolation-Output)  
 
@@ -1821,9 +1830,6 @@ The Bisection Method is one of the simplest numerical techniques for finding the
 
 The main concept of this method is if the function `f(x)` is real and continuous in the interval `a<x<b` and `f(a)` and `f(b)` are of opposite sign that is , `f(a) *f(b) < 0 `then there exist at least one solution in this interval. <br>
 
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -2083,11 +2089,6 @@ f(x) = 0.It is a bracketing method, meaning it starts with two initial points $x
 
 ```x₀ = x₁ - f(x₁) * (x₂ - x₁)(f(x₂) - f(x₁)```<br>
 
-
-
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -2356,9 +2357,6 @@ The formula :<br>
 
 The formula uses both the function value and its derivative so each step is guided by the slope of the curve.If the initial guess is close and the derivative is not zero, the accuracy nearly doubles with every step.<br>​
 
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -2616,9 +2614,6 @@ The Secant Method is an iterative numerical technique designed to find the roots
 
 It converges faster than the Bisection method but slightly slower than the Newton-Raphson method.The method is highly effective when the initial guesses are chosen close to the actual root.<br>
 
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -3749,9 +3744,7 @@ Newton’s Forward Interpolation Method is used to estimate the value of a funct
 It is most suitable when the interpolation point lies near the **beginning of the data table**. The method constructs a polynomial using forward differences.
 
 ---
-<br>
 
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -3921,9 +3914,6 @@ Newton’s Backward Interpolation Method is used to estimate the value of a func
 It constructs an interpolation polynomial using backward differences.
 
 ---
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -4101,9 +4091,6 @@ Newton’s Divided Difference Interpolation Method is used to estimate the value
 It constructs an interpolation polynomial using divided differences instead of finite differences.
 
 ---
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -4304,9 +4291,6 @@ The Runge–Kutta Fourth Order (RK4) method is a numerical technique used to app
 It provides high accuracy by combining multiple slope evaluations within a single step.
 
 ---
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -4436,7 +4420,6 @@ Final soln.: 1.11689
 <br>
 
 
-
 ## Simpson 1/3 Rule
 
 <br>
@@ -4451,9 +4434,6 @@ Simpson’s 1/3 Rule is a numerical method used to approximate the definite inte
 Where `h = (b - a)/n`<br>
 n must be even.<br>
 
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
@@ -4637,9 +4617,6 @@ Simpson’s 3/8 Rule is a numerical method used to approximate the definite inte
 Where `h = (b - a)/n`<br>
 `n` must be a multiple of 3<br>
 
-<br>
-
-### 🔢 Mathematical Representation
 
 <br>
 
