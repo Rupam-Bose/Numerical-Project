@@ -4830,50 +4830,323 @@ q
 <br>
 
 ### 📖 Differentiation Using Forward Interpolation Theory
-
+Numerical differentiation using forward interpolation is used to approximate the **first and second derivatives** of a function from equally spaced tabulated data.  
+This method is most suitable when the point of differentiation lies near the **beginning of the data table** and is based on Newton’s forward interpolation polynomial.
 <br>
 
 ### 🔢 Mathematical Representation
+Forward interpolation parameter:
+```
+u = (x − x0) / h
 
+```
+Forward Interpolation Formula:
+```
+y ≈ y0+ uΔy0+ u(u−1)/2! Δ²y0+ u(u−1)(u−2)/3! Δ³y0+...
+```
+First derivative:
+```
+dy/dx ≈ (1/h) [Δy0+ (2u − 1)/2! Δ²y0+(3u² − 6u + 2)/3! Δ³y0+...]
+```
+Second derivative:
+```
+d²y/dx² ≈ (1/h²) [Δ²y0+ (u − 1) Δ³y0+...]
+```
+---
 <br>
 
 ### 🤖 Algorithm
-
+1. Arrange data points with equal spacing.
+2. Construct the forward difference table.
+3. Compute the interpolation parameter **u**.
+4. Differentiate the forward interpolation polynomial.
+5. Substitute values to compute the required derivatives.
+---
 <br>
 
 ### 💻 Differentiation Using Forward Interpolation Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include <fstream> 
+using namespace std;
+
+double fun(double x)
+{
+    return pow(sin(x), 5) + 4 * pow(sin(x), 4) + 1;
+}
+
+double fd(double x)
+{
+    return cos(x) * (5 * (pow(sin(x), 4)) + 16 * (pow(sin(x), 3)));
+}
+
+double sd(double x)
+{
+    return (-sin(x) * (5 * (pow(sin(x), 4)) + 16 * (pow(sin(x), 3)))) + (pow(cos(x), 2) * (20 * (pow(sin(x), 3)) + 48 * (pow(sin(x), 2))));
+}
+
+void u_fd(double u, vector<double> &U1, int n)
+{
+    for (int i = 0; i <= n; i++)
+    {
+        if (i == 0)
+        {
+            U1[i] = 0;
+        }
+        else if (i == 1)
+        {
+            U1[i] = 1;
+        }
+        else if (i == 2)
+        {
+            U1[i] = 2 * u - 1;
+        }
+        else if (i == 3)
+        {
+            U1[i] = 3 * pow(u, 2) - 6 * u + 2;
+        }
+        else if (i == 4)
+        {
+            U1[i] = 4 * pow(u, 3) - 18 * pow(u, 2) + 22 * u - 6;
+        }
+        else if (i == 5)
+        {
+            U1[i] = 5 * pow(u, 4) - 40 * pow(u, 3) + 105 * pow(u, 2) - 100 * u + 24;
+        }
+        else if (i == 6)
+        {
+            U1[i] = 6 * pow(u, 5) - 75 * pow(u, 4) + 340 * pow(u, 3) - 675 * u * u + 548 * u - 120;
+        }
+        else if (i == 7)
+        {
+            U1[i] = 7 * pow(u, 6) - 126 * pow(u, 5) + 875 * pow(u, 4) - 2940 * pow(u, 3) + 4872 * u * u - 3528 * u + 720;
+        }
+        else if (i == 8)
+        {
+            U1[i] = 8 * pow(u, 7) - 196 * pow(u, 6) + 1932 * pow(u, 5) - 9800 * pow(u, 4) + 27076 * pow(u, 3) - 39396 * u * u + 26136 * u - 5040;
+        }
+        else if (i > 8 && i <= n)
+        {
+            U1[i] = 0;
+        }
+    }
+}
+
+void u_sd(double u, vector<double> &U2, int n)
+{
+    for (int i = 0; i <= n; i++)
+    {
+        if (i == 0)
+        {
+            U2[i] = 0;
+        }
+        else if (i == 1)
+        {
+            U2[i] = 0;
+        }
+        else if (i == 2)
+        {
+            U2[i] = 2;
+        }
+        else if (i == 3)
+        {
+            U2[i] = 6 * u - 6;
+        }
+        else if (i == 4)
+        {
+            U2[i] = 12 * pow(u, 2) - 36 * u + 22;
+        }
+        else if (i == 5)
+        {
+            U2[i] = 20 * pow(u, 3) - 120 * pow(u, 2) + 210 * u - 100;
+        }
+        else if (i == 6)
+        {
+            U2[i] = 30 * pow(u, 4) - 300 * pow(u, 3) + 1020 * u * u - 1350 * u + 548;
+        }
+        else if (i == 7)
+        {
+            U2[i] = 42 * pow(u, 5) - 630 * pow(u, 4) + 3500 * pow(u, 3) - 8820 * u * u + 9744 * u - 3528;
+        }
+        else if (i == 8)
+        {
+            U2[i] = 56 * pow(u, 6) - 1176 * pow(u, 5) + 9660 * pow(u, 4) - 39200 * pow(u, 3) + 81228 * u * u - 78792 * u + 26136;
+        }
+        else if (i > 8 && i <= n)
+        {
+            U2[i] = 0;
+        }
+    }
+}
+
+long long int fact(int n)
+{
+    long long int f = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        f *= i;
+    }
+    return f;
+}
+
+void newton_forward(vector<double> &x, vector<vector<double>> &y, vector<double> &U1, vector<double> &U2, vector<double> &ans, ofstream &fout)
+{
+    int n = x.size() - 1;
+
+    // find difference table
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 0; j <= n - i; j++)
+        {
+            y[j][i] = y[j + 1][i - 1] - y[j][i - 1];
+        }
+    }
+
+    // display forward difference table
+    for (int i = 0; i <= n; i++)
+    {
+        fout << x[i] << "  ";
+        for (int j = 0; j <= n - i; j++)
+        {
+            fout << y[i][j] << " ";
+        }
+        fout << endl;
+    }
+
+    ans[0] = 0.0;
+    for (int i = 1; i <= 8; i++)
+    {
+        ans[0] += (U1[i] * y[0][i]) / fact(i);
+    }
+
+    ans[1] = 0.0;
+    for (int i = 2; i <= 8; i++)
+    {
+        ans[1] += (U2[i] * y[0][i]) / fact(i);
+    }
+}
+
+int main()
+{
+    ifstream fin("input1.txt");
+    ofstream fout("output3.txt");
+    int n;
+    double a, b, p;
+    fin >> b;
+    fin >> a;
+    fin >> n;
+    fin >> p;
+   
+    int points = n + 1;
+    vector<double> x(points, 0), y0(points), U1(points), U2(points), ans(2);
+
+    double h = (b - a) / n;
+    x[0] = a;
+    for (int i = 1; i <= n; i++)
+    {
+        x[i] = x[i - 1] + h;
+    }
+
+    for (int i = 0; i <= n; i++)
+    {
+        y0[i] = fun(x[i]);
+    }
+
+    vector<vector<double>> y(points, vector<double>(points, 0));
+    for (int i = 0; i <= n; i++)
+    {
+        y[i][0] = y0[i];
+    }
+
+    double u = (p - x[0]) / h;
+
+    u_fd(u, U1, n);
+    u_sd(u, U2, n);
+
+    double fd_true = fd(p);
+    double sd_true = sd(p);
+
+    newton_forward(x, y, U1, U2, ans, fout);
+    double fd_approx, sd_approx;
+    fd_approx = ans[0] / h;
+    sd_approx = ans[1] / (h * h);
+    fout << "First derivative: " << fd_approx << endl;
+    fout << "Second derivative: " << sd_approx << endl;
+
+    double err1 = fabs((fd_true - fd_approx) / fd_true) * 100.0;
+    double err2 = fabs((sd_true - sd_approx) / sd_true) * 100.0;
+
+    fout << fd_true << " " << sd_true << endl;
+
+    fout << "Relative error for first derivative: " << err1 << " %" << endl;
+    fout << "Relative error for second derivative: " << err2 << " %" << endl;
+    return 0;
+}
+
 ```
 <br>
 
 ### 📝 Differentiation Using Forward Interpolation Input
 ```
-Input
+5
+0
+15
+1.5
 ```
 <br>
 
 ### 📤 Differentiation Using Forward Interpolation Output
 ```
-Output
+
+0  1 0.0495943 0.576088 0.550311 -1.41925 0.488563 1.76841 -3.37971 2.36032 1.73666 -6.90955 9.16086 -4.63669 -7.28325 21.7453 -28.9352 
+0.333333  1.04959 0.625682 1.1264 -0.868938 -0.930686 2.25697 -1.6113 -1.0194 4.09698 -5.17289 2.25131 4.52417 -11.9199 14.4621 -7.1899 
+0.666667  1.67528 1.75208 0.257461 -1.79962 1.32629 0.645673 -2.6307 3.07758 -1.07592 -2.92158 6.77548 -7.39577 2.54213 7.27217 
+1  3.42736 2.00954 -1.54216 -0.473335 1.97196 -1.98502 0.446883 2.00166 -3.9975 3.85389 -0.620293 -4.85364 9.8143 
+1.33333  5.4369 0.46738 -2.0155 1.49863 -0.013062 -1.53814 2.44855 -1.99583 -0.143606 3.2336 -5.47393 4.96066 
+1.66667  5.90428 -1.54812 -0.516871 1.48556 -1.5512 0.910406 0.452712 -2.13944 3.08999 -2.24033 -0.513271 
+2  4.35616 -2.06499 0.968694 -0.0656381 -0.640797 1.36312 -1.68673 0.950555 0.849665 -2.7536 
+2.33333  2.29118 -1.09629 0.903056 -0.706435 0.722321 -0.323609 -0.736173 1.80022 -1.90394 
+2.66667  1.19488 -0.193239 0.196621 0.0158863 0.398712 -1.05978 1.06405 -0.103717 
+3  1.00164 0.00338174 0.212507 0.414599 -0.66107 0.00426389 0.960329 
+3.33333  1.00502 0.215889 0.627105 -0.246471 -0.656806 0.964593 
+3.66667  1.22091 0.842994 0.380634 -0.903278 0.307787 
+4  2.06391 1.22363 -0.522644 -0.595491 
+4.33333  3.28753 0.700984 -1.11813
+4.66667  3.98852 -0.41715
+5  3.57137 
+First derivative: 1.47252
+Second derivative: -20.1726
+1.47347 -20.4397
+Relative error for first derivative: 0.0641849 %
+Relative error for second derivative: 1.30672 %
+
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
-
+- Accuracy depends on step size **h**
+- Smaller **h** improves accuracy
+- Higher-order differences may increase numerical error
+- Best results are obtained near the beginning of the table
 <br>
 
 ### ➕ Advantages
-
+- Simple and systematic method
+- Suitable for equally spaced data
+- Efficient near the starting point of the table
 <br>
 
 ### ➖ Disadvantages
-
+- Not applicable for unequally spaced data
+- Accuracy decreases far from the initial point
+- Higher-order terms increase computation
 <br>
 
 ### 🚀 Applications
-- Applications
+- Numerical differentiation of experimental data
+- Engineering and scientific analysis
+- Problems where analytical derivatives are unavailable
 <br>
 
 [Back to Top](#-Table-of-Contents)
@@ -4886,50 +5159,276 @@ Output
 <br>
 
 ### 📖 Differentiation Using Backward Interpolation Theory
-
+Numerical differentiation using backward interpolation is applied to approximate the **first and second derivatives** of a function when the point of differentiation lies near the **end of the data table**.  
+The method is derived from Newton’s backward interpolation polynomial.
 <br>
 
 ### 🔢 Mathematical Representation
+Backward interpolation parameter: 
+```
+u = (x − xn) / h
+```
+
+Backward Interpolation Formula
+
+```
+y ≈ yn+ u∇yn+ u(u+1)/2! ∇²yn+ u(u+1)(u+2)/3! ∇³yn+...
+
+```
+
+First Derivative (Backward)
+
+```
+dy/dx ≈ (1/h) [∇yn+ (2u + 1)/2! ∇²yn+ (3u² + 6u + 2)/3! ∇³yn+...]
+```
+Second Derivative (Backward)
+
+```
+d²y/dx² ≈ (1/h²) [∇²yn+(u + 1) ∇³yn+...]
+```
 
 <br>
 
 ### 🤖 Algorithm
-
+1. Arrange data points with equal spacing.
+2. Construct the backward difference table.
+3. Compute the interpolation parameter **u**.
+4. Differentiate the backward interpolation polynomial.
+5. Substitute values to obtain the derivatives.
 <br>
 
 ### 💻 Differentiation Using Backward Interpolation Code
 
 ```cpp
-code
+#include <bits/stdc++.h>
+#include<fstream>
+using namespace std;
+
+double fun(double x){
+    return pow(sin(x),5) + 4*pow(sin(x),4) + 1;
+}
+
+double fd(double x){
+    return cos(x)*(5*(pow(sin(x),4))+16*(pow(sin(x),3)));
+}
+
+double sd(double x){
+    return (-sin(x)*(5*(pow(sin(x),4))+16*(pow(sin(x),3))))+(pow(cos(x),2)*(20*(pow(sin(x),3))+48*(pow(sin(x),2))));
+}
+
+void u_fd(double u, vector<double>& U1, int n)
+{
+    for(int i=0; i<=n; i++){
+        if(i==0){
+            U1[i]=0;
+        }
+        if(i==1){
+            U1[i]=1;
+        }
+        if(i==2){
+            U1[i]=2*u+1;
+        }
+        if(i==3){
+            U1[i]=3*pow(u,2)+6*u+2;
+        }
+        if(i==4){
+            U1[i]=4*pow(u,3)+18*pow(u,2)+22*u+6;
+        }
+        if(i==5){
+            U1[i]=5*pow(u,4)+40*pow(u,3)+105*pow(u,2)+100*u+24;
+        }
+        if(i>5 && i<=n){
+            U1[i]=0;
+        }
+    }
+}
+
+void u_sd(double u, vector<double>& U2, int n)
+{
+    for(int i=0; i<=n; i++){
+        if(i==0){
+            U2[i]=0;
+        }
+        if(i==1){
+            U2[i]=0;
+        }
+        if(i==2){
+            U2[i]=1;
+        }
+        if(i==3){
+            U2[i]=6*u+6;
+        }
+        if(i==4){
+            U2[i]=12*pow(u,2)+36*u+22;
+        }
+        if(i==5){
+            U2[i]=20*pow(u,3)+120*pow(u,2)+210*u+100;
+        }
+        if(i>5 && i<=n){
+            U2[i]=0;
+        }
+    }
+}
+
+int fact(int n)
+{
+    int f = 1;
+    for (int i = 2; i <= n; i++)
+    {
+        f *= i;
+    }
+    return f;
+}
+
+void newton_backward(vector<double> &x, vector<vector<double>> &y, vector<double>& U1, vector<double>& U2, vector<double> &ans, ofstream &fout)
+{
+    int n = x.size() - 1;
+
+    // find difference table
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = n; j >= i; j--)
+        {
+            y[j][i] = y[j][i - 1] - y[j - 1][i - 1];
+        }
+    }
+
+    // display backward difference table
+    for (int i = 0; i <= n; i++)
+    {
+        for (int j = 0; j <= i; j++)
+        {
+            fout << y[i][j] << " ";
+        }
+        fout << endl;
+    }
+
+    ans[0] = y[n][1];
+    for (int i = 2; i <= n; i++)
+    {
+        ans[0] += (U1[i] * y[n][i]) / fact(i);
+    }
+
+    ans[1] = y[n][2];
+    for (int i = 3; i <= n; i++)
+    {
+        ans[1] += (U2[i] * y[n][i]) / fact(i);
+    }
+}
+
+int main()
+{
+    ifstream fin("input.txt");
+    ofstream fout("output.txt");
+    int n;
+    double a, b;
+    fin >> b;
+    fin >> a;
+    fin >> n;
+
+    int points = n + 1;
+    vector<double> x(points, 0), y0(points), U1(points), U2(points), ans(2);
+
+    double h = (b - a) / n;
+    x[0] = a;
+    for (int i = 1; i <= n; i++)
+    {
+        x[i] = x[i - 1] + h;
+    }
+
+    for (int i = 0; i <= n; i++)
+    {
+        y0[i] = fun(x[i]);
+    }
+
+    vector<vector<double>> y(points, vector<double>(points, 0));
+    for (int i = 0; i <= n; i++)
+    {
+        y[i][0] = y0[i];
+    }
+
+    double p;
+    fin >> p;
+
+    double u = (p - x[n]) / h;
+
+    u_fd(u, U1, n);
+    u_sd(u, U2, n);
+
+    double fd_true=fd(p);
+    double sd_true=sd(p);
+
+    newton_backward(x, y, U1, U2, ans,fout);
+    double fd_approx,sd_approx;
+    fd_approx=ans[0] / h;
+    sd_approx=ans[1] / (h * h);
+    fout << "First derivative: " << fd_approx << endl;
+    fout << "Second derivative: " << sd_approx << endl;
+
+    double err1=fabs((fd_true-fd_approx)/fd_true)*100.0;
+    double err2=fabs((sd_true-sd_approx)/sd_true)*100.0;
+
+    fout<<"Relative error for first derivative: "<<err1<<" %"<<endl;
+    fout<<"Relative error for second derivative: "<<err2<<" %"<<endl;
+    return 0;
+}
 ```
 <br>
 
 ### 📝 Differentiation Using Backward Interpolation Input
 ```
-Input
+5 0 15 4.5
 ```
 <br>
 
 ### 📤 Differentiation Using Backward Interpolation Output
 ```
-Output
+1 
+1.04959 0.0495943 
+1.67528 0.625682 0.576088 
+3.42736 1.75208 1.1264 0.550311 
+5.4369 2.00954 0.257461 -0.868938 -1.41925 
+5.90428 0.46738 -1.54216 -1.79962 -0.930686 0.488563 
+4.35616 -1.54812 -2.0155 -0.473335 1.32629 2.25697 1.76841 
+2.29118 -2.06499 -0.516871 1.49863 1.97196 0.645673 -1.6113 -3.37971 
+1.19488 -1.09629 0.968694 1.48556 -0.013062 -1.98502 -2.6307 -1.0194 2.36032 
+1.00164 -0.193239 0.903056 -0.0656381 -1.5512 -1.53814 0.446883 3.07758 4.09698 1.73666 
+1.00502 0.00338174 0.196621 -0.706435 -0.640797 0.910406 2.44855 2.00166 -1.07592 -5.17289 -6.90955 
+1.22091 0.215889 0.212507 0.0158863 0.722321 1.36312 0.452712 -1.99583 -3.9975 -2.92158 2.25131 9.16086 
+2.06391 0.842994 0.627105 0.414599 0.398712 -0.323609 -1.68673 -2.13944 -0.143606 3.85389 6.77548 4.52417 -4.63669 
+3.28753 1.22363 0.380634 -0.246471 -0.66107 -1.05978 -0.736173 0.950555 3.08999 3.2336 -0.620293 -7.39577 -11.9199 -7.28325 
+3.98852 0.700984 -0.522644 -0.903278 -0.656806 0.00426389 1.06405 1.80022 0.849665 -2.24033 -5.47393 -4.85364 2.54213 14.4621 21.7453 
+3.57137 -0.41715 -1.11813 -0.595491 0.307787 0.964593 0.960329 -0.103717 -1.90394 -2.7536 -0.513271 4.96066 9.8143 7.27217 -7.1899 -28.9352 
+First derivative: 2.19095
+Second derivative: -8.86491
+Relative error for first derivative: 0.13249 %
+Relative error for second derivative: 0.826269 %
 ```
 <br>
 
 ### 🎯 Accuracy Consideration
-
+- Accuracy depends on step size **h**
+- Smaller **h** increases precision
+- Higher-order differences may cause rounding errors
+- Most accurate near the end of the table
 <br>
 
 ### ➕ Advantages
-
+- Effective near the end of the dataset
+- Simple and structured approach
+- Suitable for equally spaced data
 <br>
 
 ### ➖ Disadvantages
-
+- Not suitable for unequally spaced data
+- Accuracy reduces away from the table end
+- Computational cost increases with order
 <br>
 
 ### 🚀 Applications
-- Applications
+- Engineering and scientific computations
+- Numerical differentiation of tabulated data
+- Approximation of derivatives in experimental studies
 <br>
 
 [Back to Top](#-Table-of-Contents)
